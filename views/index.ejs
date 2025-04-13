@@ -1,0 +1,193 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background: #1e1e2f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, #2c3e50, #1e1e2f);
+      background-size: 400% 400%;
+      z-index: -1;
+      animation: move-bg 20s linear infinite;
+    }
+    @keyframes move-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: rgba(0,0,0,0.6);
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .logo {
+      font-size: 2.6em;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+      cursor: default;
+    }
+    .hero {
+      position: relative;
+      padding: 60px 20px;
+      text-align: center;
+      color: #fff;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('/images/banner.jpg') no-repeat center center/cover;
+      opacity: 0.25;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.2em;
+    }
+    .recent-mods {
+      margin-top: 40px;
+    }
+    .mods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .mod-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+    .mod-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .mod-image {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+    }
+    .mod-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .mod-details {
+      padding: 15px;
+      text-align: center;
+    }
+    .mod-details h3 {
+      margin-bottom: 10px;
+      color: #f2f2f2;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 5px;
+      background-color: #4a90e2;
+      color: white;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #357ABD;
+    }
+    .no-mods {
+      text-align: center;
+      font-style: italic;
+      margin-top: 20px;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">Apologize</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Script</h1>
+        <p>Script Go Go Go</p>
+      </div>
+    </section>
+
+    <main>
+      <section class="recent-mods">
+        <h2>New Script</h2>
+
+        <div class="mods-grid">
+          <% if (recentMods.length > 0) { %>
+            <% recentMods.forEach(mod => { %>
+              <div class="mod-card">
+                <div class="mod-image">
+                  <img src="<%= mod.image || '/images/default.png' %>" alt="<%= mod.name %>">
+                </div>
+                <div class="mod-details">
+                  <h3><%= mod.name %></h3>
+                  <a href="/mod/<%= mod.shortId %>" class="btn btn-primary">ดาวน์โหลด</a>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="no-mods">There is currently no script available.</p>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; <%= new Date().getFullYear() %> Apologize. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>

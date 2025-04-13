@@ -1,0 +1,163 @@
+// routes/admin.js
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcryptjs');
+const shortid = require('shortid');
+const Mod = require('../models/Mod');
+const User = require('../models/User');
+const auth = require('../middlewares/auth');
+
+// Middleware to check if user is admin
+const isAdmin = (req, res, next) => {
+  if (req.session.user && req.session.user.isAdmin) {
+    return next();
+  }
+  return res.redirect('/admin/login');
+};
+
+// Admin login page
+router.get('/login', (req, res) => {
+  if (req.session.user && req.session.user.isAdmin) {
+    return res.redirect('/admin/dashboard');
+  }
+  res.render('admin/login', { title: 'Admin Login' });
+});
+
+// Admin login process
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.render('admin/login', { 
+        title: 'Admin Login',
+        error: 'Invalid credentials' 
+      });
+    }
+    
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.render('admin/login', { 
+        title: 'Admin Login',
+        error: 'Invalid credentials' 
+      });
+    }
+    
+    // Set session
+    req.session.user = {
+      id: user._id,
+      username: user.username,
+      isAdmin: user.isAdmin
+    };
+    
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.render('admin/login', { 
+      title: 'Admin Login',
+      error: 'Server error' 
+    });
+  }
+});
+
+// Admin dashboard
+router.get('/dashboard', isAdmin, async (req, res) => {
+  try {
+    const mods = await Mod.find().sort({ createdAt: -1 });
+    res.render('admin/dashboard', { 
+      title: 'Admin Dashboard',
+      mods
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Create link page
+router.get('/create-link', isAdmin, (req, res) => {
+  res.render('admin/create-link', { title: 'Create New Link' });
+});
+
+// Create link process
+router.post('/create-link', isAdmin, async (req, res) => {
+  try {
+    const { name, originalLink, image } = req.body;
+    
+    // Generate short ID
+    const shortId = shortid.generate();
+    
+    const newMod = new Mod({
+      name,
+      originalLink,
+      image: image || '/images/default-mod.png',
+      shortId,
+      createdBy: req.session.user.username
+    });
+    
+    await newMod.save();
+    
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.render('admin/create-link', { 
+      title: 'Create New Link',
+      error: 'Error creating link',
+      formData: req.body
+    });
+  }
+});
+
+// Edit link page
+router.get('/edit/:id', isAdmin, async (req, res) => {
+  try {
+    const mod = await Mod.findById(req.params.id);
+    if (!mod) {
+      return res.status(404).send('Mod not found');
+    }
+    res.render('admin/edit-link', { title: 'Edit Link', mod });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Update link
+router.put('/edit/:id', isAdmin, async (req, res) => {
+  try {
+    const { name, originalLink, image } = req.body;
+    
+    await Mod.findByIdAndUpdate(req.params.id, {
+      name,
+      originalLink,
+      image: image || '/images/default-mod.png'
+    });
+    
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Delete link
+router.delete('/delete/:id', isAdmin, async (req, res) => {
+  try {
+    await Mod.findByIdAndDelete(req.params.id);
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Logout
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+module.exports = router;
