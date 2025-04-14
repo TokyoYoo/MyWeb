@@ -4,14 +4,339 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> - Apologize</title>
+  <title><%= title %> - Free Mod</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* สไตล์สำหรับหน้า edit-link */
+    :root {
+      --primary: #7e57c2;
+      --primary-light: #b085f5;
+      --primary-dark: #4d2c91;
+      --secondary: #ffb74d;
+      --background: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --success: #66bb6a;
+      --danger: #ef5350;
+      --border: #e0e0e0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .admin-header:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      opacity: 0.5;
+    }
+    
+    .logo a {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    
+    .logo a:before {
+      content: '✨';
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+    }
+    
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(126, 87, 194, 0.2);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(126, 87, 194, 0.3);
+    }
+    
+    .btn-outline {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    .edit-link-page {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .edit-link-page:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+    }
+    
+    .edit-link-page h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+      padding-bottom: 12px;
+    }
+    
+    .edit-link-page h1:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+      border-radius: 3px;
+    }
+    
+    .form-group {
+      margin-bottom: 24px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 15px;
+    }
+    
+    input[type="text"],
+    input[type="url"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e4e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background-color: #f8f9fa;
+    }
+    
+    input[type="text"]:focus,
+    input[type="url"]:focus {
+      border-color: var(--primary-light);
+      background-color: #fff;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.1);
+    }
+    
+    small {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+    
+    .form-static-text {
+      padding: 10px 16px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 6px;
+      border-left: 3px solid var(--primary-light);
+    }
+    
+    .form-actions {
+      margin-top: 32px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .form-actions .btn {
+      min-width: 180px;
+    }
+    
+    .alert-danger {
+      background-color: #fff2f0;
+      border-left: 4px solid #ff4d4f;
+      color: #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    
+    .stat-item {
+      background-color: #fdf9ff;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(126, 87, 194, 0.1);
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      border-color: rgba(126, 87, 194, 0.3);
+    }
+    
+    .stat-item:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-light), var(--primary));
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--primary);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+    
+    footer p:after {
+      content: '❤️';
+      margin-left: 4px;
+      font-size: 12px;
+    }
+    
+    @media (max-width: 768px) {
+      .admin-header {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+      }
+      
+      .admin-nav {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .edit-link-page {
+        padding: 20px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <header class="admin-header">
       <div class="logo">
-        <a href="/admin/dashboard">Apologize Admin</a>
+        <a href="/admin/dashboard">Free Mod Admin</a>
       </div>
       <div class="admin-nav">
         <a href="/admin/dashboard" class="btn btn-sm">กลับไป Dashboard</a>
@@ -48,7 +373,7 @@
         <div class="form-group">
           <label>Short ID</label>
           <p class="form-static-text"><%= mod.shortId %></p>
-          <small>URL ของลิงก์: <a href="/mod/<%= mod.shortId %>" target="_blank">https://yourdomain.com/mod/<%= mod.shortId %></a></small>
+          <small>URL ของลิงก์: <a href="/mod/<%= mod.shortId %>" target="_blank" style="color: var(--primary); text-decoration: none;">https://yourdomain.com/mod/<%= mod.shortId %></a></small>
         </div>
         
         <div class="form-group">

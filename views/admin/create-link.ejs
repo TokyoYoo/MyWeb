@@ -1,17 +1,404 @@
-<!-- views/admin/create-link.ejs -->
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> - Apologize</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <title>Free Mod - Preview</title>
+  <style>
+    /* ตัวแปรสี */
+    :root {
+      --primary: #7e57c2;
+      --primary-light: #b085f5;
+      --primary-dark: #4d2c91;
+      --secondary: #ffb74d;
+      --secondary-light: #ffe9ca;
+      --background: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --success: #66bb6a;
+      --danger: #ef5350;
+      --border: #e0e0e0;
+      --shadow: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Reset และฟอนต์พื้นฐาน */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Prompt', 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* คอนเทนเนอร์ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* เฮดเดอร์ */
+    header {
+      background-color: var(--card-bg);
+      padding: 15px 0;
+      box-shadow: 0 2px 10px var(--shadow);
+      margin-bottom: 30px;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .admin-header .logo a {
+      color: white;
+    }
+
+    .logo a:before {
+      content: '✨';
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* ปุ่ม */
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid white;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ฟอร์ม */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--primary-light);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+    }
+
+    small {
+      display: block;
+      margin-top: 5px;
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+
+    .form-static-text {
+      padding: 10px 0;
+      font-weight: 500;
+    }
+
+    .form-actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* แจ้งเตือน */
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-danger {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-left: 4px solid var(--danger);
+      color: var(--danger);
+    }
+
+    /* หน้าล็อกอิน */
+    .login-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+    }
+
+    .login-form-container {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 5px 30px var(--shadow);
+      border-top: 5px solid var(--primary);
+      position: relative;
+    }
+
+    .login-form-container:before {
+      content: '🔐';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      background: white;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px var(--shadow);
+    }
+
+    .login-form-container h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    /* สร้าง/แก้ไขลิงก์ */
+    .create-link-page,
+    .edit-link-page {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px var(--shadow);
+    }
+
+    .create-link-page h1,
+    .edit-link-page h1 {
+      margin-bottom: 25px;
+      color: var(--primary);
+      font-size: 1.8rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .create-link-page h1:after,
+    .edit-link-page h1:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+      border-radius: 3px;
+    }
+
+    /* สถิติ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .stat-item {
+      background-color: var(--secondary-light);
+      border-radius: 8px;
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+
+    /* ฟุตเตอร์ */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px 0;
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+
+    /* ทัชเอฟเฟกต์สำหรับมือถือ */
+    @media (hover: none) {
+      .btn:active {
+        transform: scale(0.98);
+      }
+    }
+
+    /* รีสปอนซีฟ */
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .form-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .admin-nav {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* น่ารักเล็กน้อย */
+    .btn {
+      border-radius: 12px;
+    }
+
+    input {
+      border-radius: 10px;
+    }
+
+    .create-link-form button, 
+    .edit-link-form button, 
+    .login-form button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .create-link-form button:after, 
+    .edit-link-form button:after, 
+    .login-form button:after {
+      content: '✨';
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .create-link-form button:hover:after, 
+    .edit-link-form button:hover:after, 
+    .login-form button:hover:after {
+      opacity: 1;
+    }
+
+    /* เอฟเฟกต์เมื่อโฮเวอร์ */
+    .form-group:focus-within label {
+      color: var(--primary);
+    }
+  </style>
 </head>
 <body>
   <div class="container">
+    <!-- เฮดเดอร์ -->
     <header class="admin-header">
       <div class="logo">
-        <a href="/admin/dashboard">Apologize Admin</a>
+        <a href="/admin/dashboard">Free Mod Admin</a>
       </div>
       <div class="admin-nav">
         <a href="/admin/dashboard" class="btn btn-sm">กลับไป Dashboard</a>
@@ -19,29 +406,28 @@
       </div>
     </header>
 
+    <!-- แสดงตัวอย่างหน้าสร้างลิงก์ -->
     <main class="create-link-page">
       <h1>สร้างลิงก์ใหม่</h1>
       
-      <% if (typeof error !== 'undefined') { %>
-        <div class="alert alert-danger">
-          <%= error %>
-        </div>
-      <% } %>
+      <div class="alert alert-danger">
+        กรุณากรอกข้อมูลให้ครบถ้วน
+      </div>
       
       <form action="/admin/create-link" method="POST" class="create-link-form">
         <div class="form-group">
           <label for="name">ชื่อมอด *</label>
-          <input type="text" id="name" name="name" value="<%= typeof formData !== 'undefined' ? formData.name : '' %>" required>
+          <input type="text" id="name" name="name" placeholder="ใส่ชื่อมอดที่ต้องการ" required>
         </div>
         
         <div class="form-group">
           <label for="originalLink">ลิงก์มอดต้นฉบับ *</label>
-          <input type="url" id="originalLink" name="originalLink" value="<%= typeof formData !== 'undefined' ? formData.originalLink : '' %>" required>
+          <input type="url" id="originalLink" name="originalLink" placeholder="https://..." required>
         </div>
         
         <div class="form-group">
           <label for="image">ลิงก์รูปภาพ (ไม่บังคับ)</label>
-          <input type="url" id="image" name="image" value="<%= typeof formData !== 'undefined' ? formData.image : '' %>">
+          <input type="url" id="image" name="image" placeholder="https://...">
           <small>หากไม่ใส่ จะใช้รูปภาพเริ่มต้น</small>
         </div>
         
@@ -52,7 +438,7 @@
     </main>
 
     <footer>
-      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved.</p>
+      <p>&copy; 2025 Free Mod. All rights reserved. Made with ❤️</p>
     </footer>
   </div>
 </body>

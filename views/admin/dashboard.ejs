@@ -6,82 +6,253 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <!-- เพิ่ม Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <!-- เพิ่ม Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <header class="admin-header">
-      <div class="logo">
-        <a href="/admin/dashboard">My Name Is Mr.M No.1</a>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <h2>My Name Is Mr.M No.1</h2>
       </div>
-      <div class="admin-nav">
-        <a href="/admin/create-link" class="btn btn-sm">Create a new link</a>
-        <a href="/admin/logout" class="btn btn-sm btn-outline">Log out</a>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> ภาพรวม</a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> สร้างลิงก์ใหม่</a></li>
+          <li><a href="/admin/settings"><i class="fas fa-cog"></i> ตั้งค่า</a></li>
+          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <p>&copy; <%= new Date().getFullYear() %> Free Mod</p>
       </div>
-    </header>
+    </aside>
 
-    <main class="admin-dashboard">
-      <h1>Dashboard</h1>
-      
-      <div class="dashboard-stats">
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <header class="main-header">
+        <div class="header-left">
+          <h1>ภาพรวมระบบ</h1>
+          <p class="date-display"><%= new Date().toLocaleDateString('th-TH', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
+        </div>
+        <div class="header-right">
+          <div class="user-menu">
+            <span class="user-greeting">สวัสดี, แอดมิน</span>
+            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Overview -->
+      <section class="dashboard-stats">
         <div class="stat-card">
-          <h3>All scripts</h3>
-          <p class="stat-number"><%= mods.length %></p>
+          <div class="stat-icon">
+            <i class="fas fa-file-code"></i>
+          </div>
+          <div class="stat-info">
+            <h3>จำนวนสคริปต์</h3>
+            <p class="stat-number"><%= mods.length %></p>
+          </div>
         </div>
         <div class="stat-card">
-          <h3>Total number of clicks</h3>
-          <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.clicks, 0) %></p>
+          <div class="stat-icon">
+            <i class="fas fa-mouse-pointer"></i>
+          </div>
+          <div class="stat-info">
+            <h3>คลิกทั้งหมด</h3>
+            <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.clicks, 0) %></p>
+          </div>
         </div>
         <div class="stat-card">
-          <h3>Total number of downloads</h3>
-          <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %></p>
+          <div class="stat-icon">
+            <i class="fas fa-download"></i>
+          </div>
+          <div class="stat-info">
+            <h3>ดาวน์โหลดทั้งหมด</h3>
+            <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %></p>
+          </div>
         </div>
-      </div>
-      
-      <div class="mods-table-container">
-        <h2>All scripts list</h2>
-        <table class="mods-table">
-          <thead>
-            <tr>
-              <th>Script Name</th>
-              <th>Short ID</th>
-              <th>Click</th>
-              <th>Download</th>
-              <th>Link</th>
-              <th>Manage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (mods.length > 0) { %>
-              <% mods.forEach(mod => { %>
-                <tr>
-                  <td><%= mod.name %></td>
-                  <td><%= mod.shortId %></td>
-                  <td><%= mod.clicks %></td>
-                  <td><%= mod.completedClicks %></td>
-                  <td>
-                    <a href="/mod/<%= mod.shortId %>" target="_blank" class="link-btn">ดูลิงก์</a>
-                  </td>
-                  <td class="actions">
-                    <a href="/admin/edit/<%= mod._id %>" class="btn btn-sm">แก้ไข</a>
-                    <form action="/admin/delete/<%= mod._id %>?_method=DELETE" method="POST" class="inline-form">
-                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')">ลบ</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }) %>
-            <% } else { %>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-percentage"></i>
+          </div>
+          <div class="stat-info">
+            <h3>อัตราการดาวน์โหลด</h3>
+            <% 
+              const totalClicks = mods.reduce((total, mod) => total + mod.clicks, 0);
+              const totalDownloads = mods.reduce((total, mod) => total + mod.completedClicks, 0);
+              const conversionRate = totalClicks > 0 ? ((totalDownloads / totalClicks) * 100).toFixed(1) : 0;
+            %>
+            <p class="stat-number"><%= conversionRate %>%</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="dashboard-charts">
+        <div class="chart-container">
+          <h2>สถิติการใช้งาน</h2>
+          <canvas id="usageChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h2>สคริปต์ยอดนิยม</h2>
+          <canvas id="topModsChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Table Section -->
+      <section class="mods-table-section">
+        <div class="section-header">
+          <h2>รายการสคริปต์ทั้งหมด</h2>
+          <a href="/admin/create-link" class="btn btn-primary"><i class="fas fa-plus"></i> สร้างลิงก์ใหม่</a>
+        </div>
+        
+        <div class="table-container">
+          <table class="mods-table">
+            <thead>
               <tr>
-                <td colspan="6" class="text-center">Script data not found</td>
+                <th>ชื่อสคริปต์</th>
+                <th>Short ID</th>
+                <th>คลิก</th>
+                <th>ดาวน์โหลด</th>
+                <th>อัตราการดาวน์โหลด</th>
+                <th>ลิงก์</th>
+                <th>จัดการ</th>
               </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              <% if (mods.length > 0) { %>
+                <% mods.forEach(mod => { %>
+                  <tr>
+                    <td class="mod-name-cell">
+                      <% if (mod.image) { %>
+                        <img src="<%= mod.image %>" alt="<%= mod.name %>" class="mod-thumbnail">
+                      <% } else { %>
+                        <div class="mod-icon"><i class="fas fa-file-code"></i></div>
+                      <% } %>
+                      <span><%= mod.name %></span>
+                    </td>
+                    <td><%= mod.shortId %></td>
+                    <td><%= mod.clicks %></td>
+                    <td><%= mod.completedClicks %></td>
+                    <td>
+                      <% const rate = mod.clicks > 0 ? ((mod.completedClicks / mod.clicks) * 100).toFixed(1) : 0; %>
+                      <%= rate %>%
+                    </td>
+                    <td>
+                      <a href="/mod/<%= mod.shortId %>" target="_blank" class="link-btn">
+                        <i class="fas fa-external-link-alt"></i> ดูลิงก์
+                      </a>
+                    </td>
+                    <td class="actions">
+                      <a href="/admin/edit/<%= mod._id %>" class="btn btn-sm btn-edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <form action="/admin/delete/<%= mod._id %>?_method=DELETE" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="text-center">ไม่พบข้อมูลสคริปต์</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
-
-    <footer>
-      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved.</p>
-    </footer>
   </div>
+
+  <!-- JavaScript for charts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get mod data for charts
+      const mods = <%- JSON.stringify(mods) %>;
+
+      // Usage Chart (Clicks vs Downloads)
+      const usageCtx = document.getElementById('usageChart').getContext('2d');
+      const usageChart = new Chart(usageCtx, {
+        type: 'bar',
+        data: {
+          labels: ['คลิก', 'ดาวน์โหลด'],
+          datasets: [{
+            label: 'จำนวน',
+            data: [
+              <%= mods.reduce((total, mod) => total + mod.clicks, 0) %>,
+              <%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %>
+            ],
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(75, 192, 192, 0.7)'
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Top Mods Chart
+      // Sort mods by download count and take top 5
+      const topMods = [...mods].sort((a, b) => b.completedClicks - a.completedClicks).slice(0, 5);
+      
+      const topModsCtx = document.getElementById('topModsChart').getContext('2d');
+      const topModsChart = new Chart(topModsCtx, {
+        type: 'doughnut',
+        data: {
+          labels: topMods.map(mod => mod.name),
+          datasets: [{
+            label: 'ดาวน์โหลด',
+            data: topMods.map(mod => mod.completedClicks),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(75, 192, 192, 0.7)',
+              'rgba(153, 102, 255, 0.7)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'right',
+            },
+            title: {
+              display: true,
+              text: 'สคริปต์ยอดนิยม (ดาวน์โหลด)'
+            }
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>

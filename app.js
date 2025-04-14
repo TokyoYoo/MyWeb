@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const methodOverride = require('method-override');
+const connectDB = require('./config/db');
+
+connectDB();
 
 // Load environment variables
 dotenv.config();
