@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* เพิ่มสไตล์เฉพาะสำหรับหน้า login */
+    /* Add a unique style for the login page */
     body {
       background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
       min-height: 100vh;
@@ -202,13 +202,13 @@
   <div class="container">
     <header>
       <div class="logo">
-        <a href="/">Free Mod</a>
+        <a href="/">By @plus9995</a>
       </div>
     </header>
 
     <main class="login-page">
       <div class="login-form-container">
-        <h1>เข้าสู่ระบบแอดมิน</h1>
+        <h1>Login to admin</h1>
         
         <% if (typeof error !== 'undefined') { %>
           <div class="alert alert-danger">
@@ -219,23 +219,23 @@
         <form action="/admin/login" method="POST" class="login-form">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="ใส่ชื่อผู้ใช้" required>
+            <input type="text" id="username" name="username" placeholder="Username" required>
           </div>
           
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="ใส่รหัสผ่าน" required>
+            <input type="password" id="password" name="password" placeholder="Password is 1234" required>
           </div>
           
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-block">เข้าสู่ระบบ</button>
-          </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+          </div> 
         </form>
       </div>
     </main>
 
     <footer>
-      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved.</p>
+      <p>&copy; <%= new Date().getFullYear() %> Apologize. All rights reserved.</p>
     </footer>
   </div>
 </body>

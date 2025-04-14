@@ -395,44 +395,44 @@
 </head>
 <body>
   <div class="container">
-    <!-- เฮดเดอร์ -->
+    <!-- Header -->
     <header class="admin-header">
       <div class="logo">
-        <a href="/admin/dashboard">Free Mod Admin</a>
+        <a href="/admin/dashboard">You Know Who I Am</a>
       </div>
       <div class="admin-nav">
-        <a href="/admin/dashboard" class="btn btn-sm">กลับไป Dashboard</a>
-        <a href="/admin/logout" class="btn btn-sm btn-outline">ออกจากระบบ</a>
+        <a href="/admin/dashboard" class="btn btn-sm">Return to Dashboard</a>
+        <a href="/admin/logout" class="btn btn-sm btn-outline">Logout</a>
       </div>
     </header>
 
-    <!-- แสดงตัวอย่างหน้าสร้างลิงก์ -->
+    <!-- Preview the link creation page -->
     <main class="create-link-page">
-      <h1>สร้างลิงก์ใหม่</h1>
+      <h1>Create a new link</h1>
       
       <div class="alert alert-danger">
-        กรุณากรอกข้อมูลให้ครบถ้วน
+        Please fill out the information completely.
       </div>
       
       <form action="/admin/create-link" method="POST" class="create-link-form">
         <div class="form-group">
-          <label for="name">ชื่อมอด *</label>
-          <input type="text" id="name" name="name" placeholder="ใส่ชื่อมอดที่ต้องการ" required>
+          <label for="name">Script Name *</label>
+          <input type="text" id="name" name="name" placeholder="Enter the name of the desired script." required>
         </div>
         
         <div class="form-group">
-          <label for="originalLink">ลิงก์มอดต้นฉบับ *</label>
+          <label for="originalLink">Script Link*</label>
           <input type="url" id="originalLink" name="originalLink" placeholder="https://..." required>
         </div>
         
         <div class="form-group">
-          <label for="image">ลิงก์รูปภาพ (ไม่บังคับ)</label>
+          <label for="image">Image link (optional)</label>
           <input type="url" id="image" name="image" placeholder="https://...">
-          <small>หากไม่ใส่ จะใช้รูปภาพเริ่มต้น</small>
+          <small>If not specified, the default image will be used.</small>
         </div>
         
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">สร้างลิงก์</button>
+          <button type="submit" class="btn btn-primary">Create a link</button>
         </div>
       </form>
     </main>
