@@ -1,5 +1,4 @@
 // app.js - ไฟล์หลักของเว็บไซต์
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');

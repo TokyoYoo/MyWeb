@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <!--  Chart.js -->
+  <!-- เพิ่ม Chart.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <!--  Font Awesome -->
+  <!-- เพิ่ม Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 <body>
@@ -16,14 +16,14 @@
     <!-- Sidebar -->
     <aside class="dashboard-sidebar">
       <div class="sidebar-header">
-        <h2>By @plus9995</h2>
+        <h2>My Name Is Mr.M No.1</h2>
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li class="active"><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
-          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
-          <li><a href="/admin/settings"><i class="fas fa-cog"></i> Comming Soon</a></li>
-          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+          <li class="active"><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> ภาพรวม</a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> สร้างลิงก์ใหม่</a></li>
+          <li><a href="/admin/settings"><i class="fas fa-cog"></i> ตั้งค่า</a></li>
+          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
         </ul>
       </nav>
       <div class="sidebar-footer">
@@ -35,12 +35,12 @@
     <main class="dashboard-main">
       <header class="main-header">
         <div class="header-left">
-          <h1>System Overview</h1>
-          <p class="date-display"><%= new Date().toLocaleDateString('en-EN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
+          <h1>ภาพรวมระบบ</h1>
+          <p class="date-display"><%= new Date().toLocaleDateString('th-TH', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
         </div>
         <div class="header-right">
           <div class="user-menu">
-            <span class="user-greeting">Hello, Noob</span>
+            <span class="user-greeting">สวัสดี, แอดมิน</span>
             <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
           </div>
         </div>
@@ -53,7 +53,7 @@
             <i class="fas fa-file-code"></i>
           </div>
           <div class="stat-info">
-            <h3>Number of scripts</h3>
+            <h3>จำนวนสคริปต์</h3>
             <p class="stat-number"><%= mods.length %></p>
           </div>
         </div>
@@ -62,7 +62,7 @@
             <i class="fas fa-mouse-pointer"></i>
           </div>
           <div class="stat-info">
-            <h3>Click</h3>
+            <h3>คลิกทั้งหมด</h3>
             <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.clicks, 0) %></p>
           </div>
         </div>
@@ -71,7 +71,7 @@
             <i class="fas fa-download"></i>
           </div>
           <div class="stat-info">
-            <h3>Download</h3>
+            <h3>ดาวน์โหลดทั้งหมด</h3>
             <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %></p>
           </div>
         </div>
@@ -80,7 +80,7 @@
             <i class="fas fa-percentage"></i>
           </div>
           <div class="stat-info">
-            <h3>Download rate</h3>
+            <h3>อัตราการดาวน์โหลด</h3>
             <% 
               const totalClicks = mods.reduce((total, mod) => total + mod.clicks, 0);
               const totalDownloads = mods.reduce((total, mod) => total + mod.completedClicks, 0);
@@ -94,33 +94,33 @@
       <!-- Charts Section -->
       <section class="dashboard-charts">
         <div class="chart-container">
-          <h2>Usage statistics</h2>
+          <h2>สถิติการใช้งาน</h2>
           <canvas id="usageChart"></canvas>
         </div>
         <div class="chart-container">
-          <h2>Popular Scripts</h2>
-          <canvas id="topModsChart"></canvas>  
+          <h2>สคริปต์ยอดนิยม</h2>
+          <canvas id="topModsChart"></canvas>
         </div>
       </section>
 
       <!-- Table Section -->
       <section class="mods-table-section">
         <div class="section-header">
-          <h2>List of all scripts</h2>
-          <a href="/admin/create-link" class="btn btn-primary"><i class="fas fa-plus"></i> Create a new link</a>
+          <h2>รายการสคริปต์ทั้งหมด</h2>
+          <a href="/admin/create-link" class="btn btn-primary"><i class="fas fa-plus"></i> สร้างลิงก์ใหม่</a>
         </div>
         
         <div class="table-container">
           <table class="mods-table">
             <thead>
               <tr>
-                <th>Script name</th> 
+                <th>ชื่อสคริปต์</th>
                 <th>Short ID</th>
-                <th>Click</th>
-                <th>Download</th>
-                <th>Download rate</th> 
-                <th>Link</th>
-                <th>Manage</th>
+                <th>คลิก</th>
+                <th>ดาวน์โหลด</th>
+                <th>อัตราการดาวน์โหลด</th>
+                <th>ลิงก์</th>
+                <th>จัดการ</th>
               </tr>
             </thead>
             <tbody>
@@ -143,8 +143,8 @@
                       <%= rate %>%
                     </td>
                     <td>
-                      <a href="/mod/<%= mod.shortId %>" target="_blank" class="link-btn"> 
-                        <i class="fas fa-external-link-alt"></i> Show link
+                      <a href="/mod/<%= mod.shortId %>" target="_blank" class="link-btn">
+                        <i class="fas fa-external-link-alt"></i> ดูลิงก์
                       </a>
                     </td>
                     <td class="actions">
@@ -152,7 +152,7 @@
                         <i class="fas fa-edit"></i>
                       </a>
                       <form action="/admin/delete/<%= mod._id %>?_method=DELETE" method="POST" class="inline-form">
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')">
                           <i class="fas fa-trash"></i>
                         </button>
                       </form>
@@ -161,7 +161,7 @@
                 <% }) %>
               <% } else { %>
                 <tr>
-                  <td colspan="7" class="text-center">Script data not found</td>
+                  <td colspan="7" class="text-center">ไม่พบข้อมูลสคริปต์</td>
                 </tr>
               <% } %>
             </tbody>
@@ -182,9 +182,9 @@
       const usageChart = new Chart(usageCtx, {
         type: 'bar',
         data: {
-          labels: ['Click', 'Download'],
+          labels: ['คลิก', 'ดาวน์โหลด'],
           datasets: [{
-            label: 'Value',
+            label: 'จำนวน',
             data: [
               <%= mods.reduce((total, mod) => total + mod.clicks, 0) %>,
               <%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %>
@@ -220,7 +220,7 @@
         data: {
           labels: topMods.map(mod => mod.name),
           datasets: [{
-            label: 'Download',
+            label: 'ดาวน์โหลด',
             data: topMods.map(mod => mod.completedClicks),
             backgroundColor: [
               'rgba(255, 99, 132, 0.7)',
@@ -247,7 +247,7 @@
             },
             title: {
               display: true,
-              text: 'Popular Scripts (Download)'
+              text: 'สคริปต์ยอดนิยม (ดาวน์โหลด)'
             }
           }
         }
