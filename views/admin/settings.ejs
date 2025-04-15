@@ -1,0 +1,263 @@
+<!-- views/admin/settings.ejs -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Apologize</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- เพิ่ม Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    .settings-tabs {
+      display: flex;
+      border-bottom: 1px solid #dee2e6;
+      margin-bottom: 20px;
+    }
+    
+    .tab-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      color: #555;
+      margin-right: 10px;
+    }
+    
+    .tab-item:hover {
+      color: #7e57c2;
+    }
+    
+    .tab-item.active {
+      color: #7e57c2;
+      border-bottom-color: #7e57c2;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .settings-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    
+    .settings-card h3 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .alert {
+      padding: 12px 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .alert-success {
+      background-color: #f0f9eb;
+      border-left: 4px solid #67c23a;
+      color: #67c23a;
+    }
+    
+    .alert-danger {
+      background-color: #fff2f0;
+      border-left: 4px solid #ff4d4f;
+      color: #ff4d4f;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    .form-control:focus {
+      border-color: #7e57c2;
+      box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+      outline: none;
+    }
+    
+    .btn-primary {
+      background-color: #7e57c2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .btn-primary:hover {
+      background-color: #6a48b0;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <h2>My Name Is Mr.M No.1</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> ภาพรวม</a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> สร้างลิงก์ใหม่</a></li>
+          <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> ตั้งค่า</a></li>
+          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <p>&copy; <%= new Date().getFullYear() %> Free Mod</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <header class="main-header">
+        <div class="header-left">
+          <h1>ตั้งค่าระบบ</h1>
+          <p class="date-display"><%= new Date().toLocaleDateString('th-TH', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
+        </div>
+        <div class="header-right">
+          <div class="user-menu">
+            <span class="user-greeting">สวัสดี, <%= user.username %></span>
+            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Settings Content -->
+      <section class="settings-section">
+        <div class="settings-tabs">
+          <div class="tab-item active" data-tab="account">
+            <i class="fas fa-user-circle"></i> บัญชีผู้ใช้
+          </div>
+          <div class="tab-item" data-tab="password">
+            <i class="fas fa-key"></i> เปลี่ยนรหัสผ่าน
+          </div>
+          <div class="tab-item" data-tab="website">
+            <i class="fas fa-globe"></i> ตั้งค่าเว็บไซต์
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div id="account" class="tab-content active">
+          <div class="settings-card">
+            <h3>ข้อมูลบัญชี</h3>
+            <div class="form-group">
+              <label>ชื่อผู้ใช้</label>
+              <input type="text" class="form-control" value="<%= user.username %>" readonly>
+            </div>
+            <div class="form-group">
+              <label>สถานะ</label>
+              <input type="text" class="form-control" value="<%= user.isAdmin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป' %>" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Settings -->
+        <div id="password" class="tab-content <%= locals.activeTab === 'password' ? 'active' : '' %>">
+          <div class="settings-card">
+            <h3>เปลี่ยนรหัสผ่าน</h3>
+            
+            <% if(locals.error && locals.activeTab === 'password'){ %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            <% if(locals.success && locals.activeTab === 'password'){ %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+            
+            <form action="/admin/settings/change-password" method="POST">
+              <div class="form-group">
+                <label for="currentPassword">รหัสผ่านปัจจุบัน</label>
+                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">รหัสผ่านใหม่</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">ยืนยันรหัสผ่านใหม่</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary">บันทึกรหัสผ่านใหม่</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Website Settings -->
+        <div id="website" class="tab-content">
+          <div class="settings-card">
+            <h3>ตั้งค่าเว็บไซต์</h3>
+            <p>ส่วนนี้อยู่ระหว่างการพัฒนา</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- JavaScript for tabs -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabItems = document.querySelectorAll('.tab-item');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      // ฟังก์ชันสำหรับเปลี่ยนแท็บ
+      function switchTab(tabId) {
+        // ซ่อนทุกเนื้อหาแท็บ
+        tabContents.forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // ยกเลิกการไฮไลท์ทุกแท็บ
+        tabItems.forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        // แสดงเนื้อหาแท็บที่เลือก
+        document.getElementById(tabId).classList.add('active');
+        
+        // ไฮไลท์แท็บที่เลือก
+        document.querySelector(`.tab-item[data-tab="${tabId}"]`).classList.add('active');
+      }
+      
+      // เพิ่มการตรวจจับคลิกสำหรับทุกแท็บ
+      tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          switchTab(tabId);
+        });
+      });
+      
+      // ตรวจสอบ activeTab จาก URL หรือตั้งค่าเริ่มต้น
+      <% if(locals.activeTab){ %>
+        switchTab('<%= locals.activeTab %>');
+      <% } %>
+    });
+  </script>
+</body>
+</html>

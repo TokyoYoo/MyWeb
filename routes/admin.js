@@ -160,41 +160,50 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// เพิ่มเส้นทางเหล่านี้ใน routes/admin.js ก่อน module.exports = router;
+// เพิ่มส่วนนี้ก่อน module.exports = router; ในไฟล์ routes/admin.js
 
-// หน้าเปลี่ยนรหัสผ่าน
-router.get('/change-password', isAdmin, (req, res) => {
-  res.render('admin/change-password', { title: 'เปลี่ยนรหัสผ่าน' });
+// หน้าตั้งค่า
+router.get('/settings', isAdmin, (req, res) => {
+  res.render('admin/settings', { 
+    title: 'ตั้งค่าระบบ',
+    user: req.session.user
+  });
 });
 
-// กระบวนการเปลี่ยนรหัสผ่าน
-router.post('/change-password', isAdmin, async (req, res) => {
+// เปลี่ยนรหัสผ่านจากหน้าตั้งค่า
+router.post('/settings/change-password', isAdmin, async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     
     // ตรวจสอบว่ารหัสผ่านใหม่ตรงกัน
     if (newPassword !== confirmPassword) {
-      return res.render('admin/change-password', {
-        title: 'เปลี่ยนรหัสผ่าน',
-        error: 'รหัสผ่านใหม่ไม่ตรงกัน'
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'รหัสผ่านใหม่ไม่ตรงกัน',
+        activeTab: 'password'
       });
     }
     
     // หาผู้ใช้จาก ID ในเซสชัน
     const user = await User.findById(req.session.user.id);
     if (!user) {
-      return res.render('admin/change-password', {
-        title: 'เปลี่ยนรหัสผ่าน',
-        error: 'ไม่พบผู้ใช้'
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'ไม่พบผู้ใช้',
+        activeTab: 'password'
       });
     }
     
     // ตรวจสอบรหัสผ่านปัจจุบัน
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.render('admin/change-password', {
-        title: 'เปลี่ยนรหัสผ่าน',
-        error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง'
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+        activeTab: 'password'
       });
     }
     
@@ -203,18 +212,21 @@ router.post('/change-password', isAdmin, async (req, res) => {
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
     
-    return res.render('admin/change-password', {
-      title: 'เปลี่ยนรหัสผ่าน',
-      success: 'เปลี่ยนรหัสผ่านสำเร็จ'
+    return res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      success: 'เปลี่ยนรหัสผ่านสำเร็จ',
+      activeTab: 'password'
     });
   } catch (err) {
     console.error(err);
-    res.render('admin/change-password', {
-      title: 'เปลี่ยนรหัสผ่าน',
-      error: 'เกิดข้อผิดพลาดในเซิร์ฟเวอร์'
+    res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      error: 'เกิดข้อผิดพลาดในเซิร์ฟเวอร์',
+      activeTab: 'password'
     });
   }
 });
-
 
 module.exports = router;

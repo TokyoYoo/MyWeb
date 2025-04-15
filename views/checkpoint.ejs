@@ -6,6 +6,9 @@
   <title><%= title %> - Apologize</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5311761039714075"
+  crossorigin="anonymous"></script> 
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,16 +243,6 @@
       </button>
     </header>
 
-    <!-- Top Ad Space -->
-    <div class="ad-space w-full max-w-xl mb-6" data-aos="fade-up" data-aos-delay="200">
-      <div class="text-center text-white/50 text-sm">
-        <!-- Google AdSense can be placed here -->
-        <div id="top-ad-container" style="width: 100%; min-height: 90px;">
-          Google AdSense
-        </div>
-      </div>
-    </div>
-
     <main class="glass max-w-xl w-full glow" data-aos="zoom-in" data-aos-duration="1000">
       <div class="flex flex-col items-center">
         <% if (mod.image) { %>
@@ -282,7 +275,7 @@
 
         <div class="text-center mb-8" data-aos="fade-up" data-aos-delay="500">
           <h2 class="text-2xl font-semibold text-white mb-2">Checkpoint <%= checkpoint %> of 3</h2>
-          <p class="text-white/70">กรุณาคลิกปุ่ม "Next" เพื่อดำเนินการต่อ</p>
+          <p class="text-white/70">Please click the button "Next"</p>
         </div>
 
         <a href="<%= nextUrl %>" class="btn-primary text-lg" data-aos="fade-up" data-aos-delay="600">
@@ -290,16 +283,6 @@
         </a>
       </div>
     </main>
-
-    <!-- Bottom Ad Space -->
-    <div class="ad-space w-full max-w-xl mt-6" data-aos="fade-up" data-aos-delay="700">
-      <div class="text-center text-white/50 text-sm">
-        <!-- Google AdSense can be placed here -->
-        <div id="bottom-ad-container" style="width: 100%; min-height: 250px;">
-          Google AdSense
-        </div>
-      </div>
-    </div>
 
     <footer class="mt-8 text-sm text-white/60" data-aos="fade-up" data-aos-delay="800">
       &copy; <%= new Date().getFullYear() %> Apologize. All rights reserved.
