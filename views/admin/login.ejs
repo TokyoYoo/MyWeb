@@ -1,258 +1,242 @@
-<!-- views/admin/dashboard.ejs -->
+<!-- views/admin/login.ejs -->
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> - Apologize</title>
+  <title><%= title %> - Free Mod</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <!--  Chart.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <!--  Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Add a unique style for the login page */
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .logo a {
+      font-size: 28px;
+      font-weight: 700;
+      color: #7e57c2;
+      text-decoration: none;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo a:after {
+      content: '✨';
+      position: absolute;
+      top: -5px;
+      right: -20px;
+      font-size: 16px;
+      animation: sparkle 1.5s infinite;
+    }
+    
+    @keyframes sparkle {
+      0% { opacity: 0.5; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    .login-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .login-form-container {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .login-form-container:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(to right, #7e57c2, #b085f5);
+    }
+    
+    .login-form-container h1 {
+      margin-bottom: 30px;
+      text-align: center;
+      color: #333;
+      font-weight: 600;
+      font-size: 24px;
+      position: relative;
+    }
+    
+    .login-form-container h1:after {
+      content: '🔐';
+      margin-left: 10px;
+      font-size: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 24px;
+      position: relative;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: #f8f9fa;
+      border: 2px solid #e4e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #7e57c2;
+      background-color: #fff;
+      box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.1);
+      outline: none;
+    }
+    
+    .form-actions {
+      margin-top: 32px;
+    }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, #7e57c2, #9575cd);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s;
+    }
+    
+    .btn:hover:before {
+      left: 100%;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(126, 87, 194, 0.2);
+    }
+    
+    .alert-danger {
+      background-color: #fff2f0;
+      border-left: 4px solid #ff4d4f;
+      color: #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
+      font-size: 13px;
+    }
+    
+    footer p {
+      position: relative;
+      display: inline-block;
+    }
+    
+    footer p:after {
+      content: '❤️';
+      margin-left: 5px;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
-  <div class="dashboard-container">
-    <!-- Sidebar -->
-    <aside class="dashboard-sidebar">
-      <div class="sidebar-header">
-        <h2>By @plus9995</h2>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <a href="/">By @plus9995</a>
       </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li class="active"><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
-          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
-          <li><a href="/admin/settings"><i class="fas fa-cog"></i> Comming Soon</a></li>
-          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
-      </nav>
-      <div class="sidebar-footer">
-        <p>&copy; <%= new Date().getFullYear() %> Free Mod</p>
-      </div>
-    </aside>
+    </header>
 
-    <!-- Main Content -->
-    <main class="dashboard-main">
-      <header class="main-header">
-        <div class="header-left">
-          <h1>System Overview</h1>
-          <p class="date-display"><%= new Date().toLocaleDateString('en-EN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
-        </div>
-        <div class="header-right">
-          <div class="user-menu">
-            <span class="user-greeting">Hello, Noob</span>
-            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
-          </div>
-        </div>
-      </header>
-
-      <!-- Dashboard Overview -->
-      <section class="dashboard-stats">
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-file-code"></i>
-          </div>
-          <div class="stat-info">
-            <h3>Number of scripts</h3>
-            <p class="stat-number"><%= mods.length %></p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-mouse-pointer"></i>
-          </div>
-          <div class="stat-info">
-            <h3>Click</h3>
-            <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.clicks, 0) %></p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-download"></i>
-          </div>
-          <div class="stat-info">
-            <h3>Download</h3>
-            <p class="stat-number"><%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %></p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-percentage"></i>
-          </div>
-          <div class="stat-info">
-            <h3>Download rate</h3>
-            <% 
-              const totalClicks = mods.reduce((total, mod) => total + mod.clicks, 0);
-              const totalDownloads = mods.reduce((total, mod) => total + mod.completedClicks, 0);
-              const conversionRate = totalClicks > 0 ? ((totalDownloads / totalClicks) * 100).toFixed(1) : 0;
-            %>
-            <p class="stat-number"><%= conversionRate %>%</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Charts Section -->
-      <section class="dashboard-charts">
-        <div class="chart-container">
-          <h2>Usage statistics</h2>
-          <canvas id="usageChart"></canvas>
-        </div>
-        <div class="chart-container">
-          <h2>Popular Scripts</h2>
-          <canvas id="topModsChart"></canvas>  
-        </div>
-      </section>
-
-      <!-- Table Section -->
-      <section class="mods-table-section">
-        <div class="section-header">
-          <h2>List of all scripts</h2>
-          <a href="/admin/create-link" class="btn btn-primary"><i class="fas fa-plus"></i> Create a new link</a>
-        </div>
+    <main class="login-page">
+      <div class="login-form-container">
+        <h1>Login to admin</h1>
         
-        <div class="table-container">
-          <table class="mods-table">
-            <thead>
-              <tr>
-                <th>Script name</th> 
-                <th>Short ID</th>
-                <th>Click</th>
-                <th>Download</th>
-                <th>Download rate</th> 
-                <th>Link</th>
-                <th>Manage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (mods.length > 0) { %>
-                <% mods.forEach(mod => { %>
-                  <tr>
-                    <td class="mod-name-cell">
-                      <% if (mod.image) { %>
-                        <img src="<%= mod.image %>" alt="<%= mod.name %>" class="mod-thumbnail">
-                      <% } else { %>
-                        <div class="mod-icon"><i class="fas fa-file-code"></i></div>
-                      <% } %>
-                      <span><%= mod.name %></span>
-                    </td>
-                    <td><%= mod.shortId %></td>
-                    <td><%= mod.clicks %></td>
-                    <td><%= mod.completedClicks %></td>
-                    <td>
-                      <% const rate = mod.clicks > 0 ? ((mod.completedClicks / mod.clicks) * 100).toFixed(1) : 0; %>
-                      <%= rate %>%
-                    </td>
-                    <td>
-                      <a href="/mod/<%= mod.shortId %>" target="_blank" class="link-btn"> 
-                        <i class="fas fa-external-link-alt"></i> Show link
-                      </a>
-                    </td>
-                    <td class="actions">
-                      <a href="/admin/edit/<%= mod._id %>" class="btn btn-sm btn-edit">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <form action="/admin/delete/<%= mod._id %>?_method=DELETE" method="POST" class="inline-form">
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                <% }) %>
-              <% } else { %>
-                <tr>
-                  <td colspan="7" class="text-center">Script data not found</td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </section>
+        <% if (typeof error !== 'undefined') { %>
+          <div class="alert alert-danger">
+            <%= error %>
+          </div>
+        <% } %>
+        
+        <form action="/admin/login" method="POST" class="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password is 1234" required>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+          </div> 
+        </form>
+      </div>
     </main>
+
+    <footer>
+      <p>&copy; <%= new Date().getFullYear() %> Apologize. All rights reserved.</p>
+    </footer>
   </div>
-
-  <!-- JavaScript for charts -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get mod data for charts
-      const mods = <%- JSON.stringify(mods) %>;
-
-      // Usage Chart (Clicks vs Downloads)
-      const usageCtx = document.getElementById('usageChart').getContext('2d');
-      const usageChart = new Chart(usageCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Click', 'Download'],
-          datasets: [{
-            label: 'Value',
-            data: [
-              <%= mods.reduce((total, mod) => total + mod.clicks, 0) %>,
-              <%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %>
-            ],
-            backgroundColor: [
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(75, 192, 192, 0.7)'
-            ],
-            borderColor: [
-              'rgba(54, 162, 235, 1)',
-              'rgba(75, 192, 192, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-
-      // Top Mods Chart
-      // Sort mods by download count and take top 5
-      const topMods = [...mods].sort((a, b) => b.completedClicks - a.completedClicks).slice(0, 5);
-      
-      const topModsCtx = document.getElementById('topModsChart').getContext('2d');
-      const topModsChart = new Chart(topModsCtx, {
-        type: 'doughnut',
-        data: {
-          labels: topMods.map(mod => mod.name),
-          datasets: [{
-            label: 'Download',
-            data: topMods.map(mod => mod.completedClicks),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(75, 192, 192, 0.7)',
-              'rgba(153, 102, 255, 0.7)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'right',
-            },
-            title: {
-              display: true,
-              text: 'Popular Scripts (Download)'
-            }
-          }
-        }
-      });
-    });
-  </script>
 </body>
 </html>
