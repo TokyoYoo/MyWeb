@@ -1507,63 +1507,51 @@ body {
   color: white;
 }
 
-/* Responsive adjustments */
-@media (max-width: 500px) {
-  .dashboard-container {
-    flex-direction: column;
-  }
-  
-  .dashboard-sidebar {
-    width: 100%;
-    min-height: auto;
-  }
-  
-  .dashboard-charts {
-    grid-template-columns: 1fr;
-  }
-}
 
+
+/* Responsive adjustments */
 @media (max-width: 767px) {
+  /* Sidebar for mobile */
   .dashboard-sidebar {
     position: fixed;
-    left: -250px;
+    left: -250px; /* ซ่อน sidebar นอกหน้าจอ */
     top: 0;
     height: 100vh;
     width: 250px;
     z-index: 1000;
     transition: left 0.3s ease;
   }
-
+  
   .dashboard-sidebar.show {
-    left: 0;
+    left: 0; /* แสดง sidebar เมื่อกดปุ่ม toggle */
   }
-
+  
+  /* Main content เต็มจอเมื่อไม่มี sidebar */
   .dashboard-main {
-    margin-left: 0;
+    margin-left: 0 !important;
     width: 100%;
+    padding-top: 60px; /* เพิ่มช่องว่างด้านบนสำหรับปุ่ม toggle */
   }
-
+  
+  /* Toggle button styles */
   .sidebar-toggle {
+    display: flex !important; /* แสดงเสมอบนมือถือ */
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 15px;
+    left: 15px;
     z-index: 1001;
     background: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
+    border-radius: 8px;
+    padding: 10px;
     cursor: pointer;
-    display: flex;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
-
-  .sidebar-toggle i {
-    font-size: 1.2rem;
-  }
-
+  
+  /* Overlay เมื่อเปิด sidebar */
   .sidebar-overlay {
     display: none;
     position: fixed;
@@ -1574,6 +1562,173 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
   }
+  
+  .sidebar-overlay.show {
+    display: block;
+  }
+
+  /* ปรับ header สำหรับมือถือ */
+  .main-header, 
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .header-right,
+  .user-menu {
+    width: 100%;
+  }
+  
+  /* ปรับ stats cards ให้เป็น 2 คอลัมน์บนมือถือ */
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  /* ปรับ charts ให้เป็น 1 คอลัมน์ */
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+  
+  /* ปรับขนาดองค์ประกอบภายใน stats card */
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  /* ปรับตารางให้เลื่อนได้ในแนวนอน */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .mods-table th,
+  .mods-table td {
+    white-space: nowrap;
+  }
+  
+  /* ปรับ section header ในตาราง */
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .section-header .btn {
+    width: 100%;
+  }
+}
+
+/* สำหรับหน้าจอที่เล็กมาก */
+@media (max-width: 480px) {
+  /* ปรับ stats cards เป็น 1 คอลัมน์ */
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  /* ปรับปุ่มในส่วน actions ให้เรียงลงมา */
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+  
+  /* ทำให้ปุ่มกว้างเต็มเซลล์ในตาราง */
+  .actions .btn,
+  .actions form,
+  .actions .inline-form {
+    width: 100%;
+  }
+  
+  .actions .btn {
+    text-align: center;
+  }
+  
+  /* ปรับขนาดตัวอักษร */
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .date-display,
+  .user-greeting {
+    font-size: 0.9rem;
+  }
+}
+
+/* แก้ไขการแสดงผล sidebar toggle */
+.sidebar-toggle {
+  display: none; /* ซ่อนโดยค่าเริ่มต้นบนจอขนาดใหญ่ */
+}
+
+/* แก้ไขปัญหาการแสดงผลของ form ด้านใน actions */
+.inline-form {
+  display: inline-block;
+}
+
+
+/* เพิ่ม CSS สำหรับปุ่มเปิด-ปิด sidebar */
+.sidebar-toggle {
+  display: none; /* ซ่อนโดยค่าเริ่มต้นบนหน้าจอขนาดใหญ่ */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--primary-dark);
+}
+
+.sidebar-toggle i {
+  font-size: 1.2rem;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* แสดงปุ่ม toggle เฉพาะบนมือถือ */
+@media (max-width: 767px) {
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .dashboard-main {
+    margin-left: 0 !important; /* ให้ main content ขยายเต็มหน้าจอบนมือถือ */
+    padding-top: 60px; /* เพิ่ม padding ด้านบนเพื่อไม่ให้เนื้อหาถูกบังโดยปุ่ม toggle */
+    width: 100%;
+  }
+}
 
   .sidebar-overlay.show {
     display: block;
@@ -1633,7 +1788,7 @@ body {
     align-items: flex-start;
     gap: 10px;
   }
-}
+
 
 /* ปรับปรุงการแสดงผลสำหรับมือถือเล็กมาก */
 @media (max-width: 480px) {
@@ -1654,4 +1809,6 @@ body {
     padding: 5px 8px;
   }
 }
+
+
 
