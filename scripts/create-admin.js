@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:eeUSxcB2qWiDKwVd@
 const createAdmin = async () => {
   try {
     // Check if admin already exists
-    const adminExists = await User.findOne({ username: 'admin' });
+    const adminExists = await User.findOne({ username: 'ksvgl' });
     
     if (adminExists) {
       console.log('Admin user already exists');
@@ -34,7 +34,7 @@ const createAdmin = async () => {
     
     // Create admin user
     const admin = new User({
-      username: 'admin',
+      username: 'ksvgl',
       password: hashedPassword,
       isAdmin: true
     });
@@ -42,8 +42,8 @@ const createAdmin = async () => {
     await admin.save();
     
     console.log('Admin user created successfully');
-    console.log('Username: admin');
-    console.log('Password: admin123');
+    console.log('Username: ksvgl');
+    console.log('Password: 0897596279Asd!');
     console.log('Please change the password after first login');
     
     process.exit(0);

@@ -1,4 +1,4 @@
-<!-- views/admin/settings.ejs -->
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <!-- เพิ่ม Font Awesome -->
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
   <style>
     .settings-tabs {
@@ -124,14 +124,14 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> ภาพรวม</a></li>
-          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> สร้างลิงก์ใหม่</a></li>
-          <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> ตั้งค่า</a></li>
-          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
+          <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
+          <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> Settings</a></li>
+          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
       </nav>
       <div class="sidebar-footer">
-        <p>&copy; <%= new Date().getFullYear() %> Free Mod</p>
+        <p>&copy; <%= new Date().getFullYear() %> Apologize</p>
       </div>
     </aside>
 
@@ -139,13 +139,13 @@
     <main class="dashboard-main">
       <header class="main-header">
         <div class="header-left">
-          <h1>ตั้งค่าระบบ</h1>
-          <p class="date-display"><%= new Date().toLocaleDateString('th-TH', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
+          <h1>Set up the system</h1>
+          <p class="date-display"><%= new Date().toLocaleDateString('en-EN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
         </div>
         <div class="header-right">
           <div class="user-menu">
-            <span class="user-greeting">สวัสดี, <%= user.username %></span>
-            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+            <span class="user-greeting">Yoo, <%= user.username %></span>
+            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </div>
       </header>
@@ -154,27 +154,27 @@
       <section class="settings-section">
         <div class="settings-tabs">
           <div class="tab-item active" data-tab="account">
-            <i class="fas fa-user-circle"></i> บัญชีผู้ใช้
+            <i class="fas fa-user-circle"></i> User account
           </div>
           <div class="tab-item" data-tab="password">
-            <i class="fas fa-key"></i> เปลี่ยนรหัสผ่าน
+            <i class="fas fa-key"></i> Change password
           </div>
           <div class="tab-item" data-tab="website">
-            <i class="fas fa-globe"></i> ตั้งค่าเว็บไซต์
+            <i class="fas fa-globe"></i> Set up website
           </div>
         </div>
 
         <!-- Account Settings -->
         <div id="account" class="tab-content active">
           <div class="settings-card">
-            <h3>ข้อมูลบัญชี</h3>
+            <h3>Account information</h3>
             <div class="form-group">
-              <label>ชื่อผู้ใช้</label>
+              <label>User name</label>
               <input type="text" class="form-control" value="<%= user.username %>" readonly>
             </div>
             <div class="form-group">
-              <label>สถานะ</label>
-              <input type="text" class="form-control" value="<%= user.isAdmin ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป' %>" readonly>
+              <label>status</label>
+              <input type="text" class="form-control" value="<%= user.isAdmin ? 'Admin' : 'member' %>" readonly>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@
         <!-- Password Settings -->
         <div id="password" class="tab-content <%= locals.activeTab === 'password' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>เปลี่ยนรหัสผ่าน</h3>
+            <h3>Change password</h3>
             
             <% if(locals.error && locals.activeTab === 'password'){ %>
               <div class="alert alert-danger"><%= error %></div>
@@ -193,18 +193,18 @@
             
             <form action="/admin/settings/change-password" method="POST">
               <div class="form-group">
-                <label for="currentPassword">รหัสผ่านปัจจุบัน</label>
+                <label for="currentPassword">Current password</label>
                 <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="newPassword">รหัสผ่านใหม่</label>
+                <label for="newPassword">New password</label>
                 <input type="password" id="newPassword" name="newPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="confirmPassword">ยืนยันรหัสผ่านใหม่</label>
+                <label for="confirmPassword">Confirm new password</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
               </div>
-              <button type="submit" class="btn btn-primary">บันทึกรหัสผ่านใหม่</button>
+              <button type="submit" class="btn btn-primary">Save the new password.</button>
             </form>
           </div>
         </div>
@@ -212,8 +212,8 @@
         <!-- Website Settings -->
         <div id="website" class="tab-content">
           <div class="settings-card">
-            <h3>ตั้งค่าเว็บไซต์</h3>
-            <p>ส่วนนี้อยู่ระหว่างการพัฒนา</p>
+            <h3>Set up website</h3>
+            <p>Comming soon</p>
           </div>
         </div>
       </section>
@@ -226,26 +226,26 @@
       const tabItems = document.querySelectorAll('.tab-item');
       const tabContents = document.querySelectorAll('.tab-content');
       
-      // ฟังก์ชันสำหรับเปลี่ยนแท็บ
+      
       function switchTab(tabId) {
-        // ซ่อนทุกเนื้อหาแท็บ
+        
         tabContents.forEach(content => {
           content.classList.remove('active');
         });
         
-        // ยกเลิกการไฮไลท์ทุกแท็บ
+        
         tabItems.forEach(item => {
           item.classList.remove('active');
         });
         
-        // แสดงเนื้อหาแท็บที่เลือก
+        
         document.getElementById(tabId).classList.add('active');
         
-        // ไฮไลท์แท็บที่เลือก
+        
         document.querySelector(`.tab-item[data-tab="${tabId}"]`).classList.add('active');
       }
       
-      // เพิ่มการตรวจจับคลิกสำหรับทุกแท็บ
+      
       tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
           const tabId = tab.getAttribute('data-tab');
@@ -253,7 +253,7 @@
         });
       });
       
-      // ตรวจสอบ activeTab จาก URL หรือตั้งค่าเริ่มต้น
+      
       <% if(locals.activeTab){ %>
         switchTab('<%= locals.activeTab %>');
       <% } %>

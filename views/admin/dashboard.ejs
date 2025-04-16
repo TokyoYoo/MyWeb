@@ -22,7 +22,7 @@
         <ul>
           <li class="active"><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
           <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
-          <li><a href="/admin/settings"><i class="fas fa-cog"></i> Comming Soon</a></li>
+          <li><a href="/admin/settings"><i class="fas fa-cog"></i> Settings</a></li>
           <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
       </nav>
@@ -173,86 +173,12 @@
 
   <!-- JavaScript for charts -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get mod data for charts
-      const mods = <%- JSON.stringify(mods) %>;
-
-      // Usage Chart (Clicks vs Downloads)
-      const usageCtx = document.getElementById('usageChart').getContext('2d');
-      const usageChart = new Chart(usageCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Click', 'Download'],
-          datasets: [{
-            label: 'Value',
-            data: [
-              <%= mods.reduce((total, mod) => total + mod.clicks, 0) %>,
-              <%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %>
-            ],
-            backgroundColor: [
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(75, 192, 192, 0.7)'
-            ],
-            borderColor: [
-              'rgba(54, 162, 235, 1)',
-              'rgba(75, 192, 192, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-
-      // Top Mods Chart
-      // Sort mods by download count and take top 5
-      const topMods = [...mods].sort((a, b) => b.completedClicks - a.completedClicks).slice(0, 5);
-      
-      const topModsCtx = document.getElementById('topModsChart').getContext('2d');
-      const topModsChart = new Chart(topModsCtx, {
-        type: 'doughnut',
-        data: {
-          labels: topMods.map(mod => mod.name),
-          datasets: [{
-            label: 'Download',
-            data: topMods.map(mod => mod.completedClicks),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(75, 192, 192, 0.7)',
-              'rgba(153, 102, 255, 0.7)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'right',
-            },
-            title: {
-              display: true,
-              text: 'Popular Scripts (Download)'
-            }
-          }
-        }
-      });
-    });
+    window.dashboardData = {
+      mods: <%- JSON.stringify(mods) %>,
+      totalClicks: <%= mods.reduce((total, mod) => total + mod.clicks, 0) %>,
+      totalDownloads: <%= mods.reduce((total, mod) => total + mod.completedClicks, 0) %>
+    };
   </script>
+  <script src="/js/dashboard.js"></script>
 </body>
 </html>

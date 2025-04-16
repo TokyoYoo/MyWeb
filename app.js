@@ -6,14 +6,16 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const methodOverride = require('method-override');
 const connectDB = require('./config/db');
+const app = express();
+
+
+// app 
+app.use(express.static('public'));
 
 connectDB();
 
 // Load environment variables
 dotenv.config();
-
-// Initialize express app
-const app = express();
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:eeUSxcB2qWiDKwVd@cluster0.1yxxo.mongodb.net/freemod', {
