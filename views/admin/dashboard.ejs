@@ -13,7 +13,9 @@
 </head>
 <body>
   <div class="dashboard-container">
-    <!-- Sidebar -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+      <i class="fas fa-bars"></i>
+    </button>
     <aside class="dashboard-sidebar">
       <div class="sidebar-header">
         <h2>By @plus9995</h2>
@@ -41,7 +43,7 @@
         <div class="header-right">
           <div class="user-menu">
             <span class="user-greeting">Hello, Noob</span>
-            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+            <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </div>
       </header>
@@ -169,6 +171,9 @@
         </div>
       </section>
     </main>
+    
+    <!-- Added sidebar overlay div -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
   </div>
 
   <!-- JavaScript for charts -->
@@ -180,5 +185,24 @@
     };
   </script>
   <script src="/js/dashboard.js"></script>
+  <script>
+    // JavaScript for mobile sidebar control
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.querySelector('.dashboard-sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+      });
+      
+      overlay.addEventListener('click', function() {
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
+      });
+    });
+  </script>
+
 </body>
 </html>
