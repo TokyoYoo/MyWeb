@@ -11,26 +11,6 @@
   <!--  Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
-<script>
-  // JavaScript for mobile sidebar control
-  document.addEventListener('DOMContentLoaded', function() {
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.querySelector('.dashboard-sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    
-    if (sidebarToggle && sidebar && overlay) {
-      sidebarToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('show');
-        overlay.classList.toggle('show');
-      });
-      
-      overlay.addEventListener('click', function() {
-        sidebar.classList.remove('show');
-        overlay.classList.remove('show');
-      });
-    }
-  });
-</script>
 <body>
   <div class="dashboard-container">
     <button class="sidebar-toggle" id="sidebarToggle">
@@ -192,10 +172,6 @@
       </section>
     </main>
     
-    <!-- Added sidebar overlay div -->
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
-  </div>
-
   <!-- JavaScript for charts -->
   <script>
     window.dashboardData = {
