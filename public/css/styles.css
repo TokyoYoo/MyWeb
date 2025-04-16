@@ -1302,7 +1302,7 @@ display: inline;
     opacity: 1;
   }
 
-  /* เอฟเฟกต์เมื่อโฮเวอร์ */
+
   .form-group:focus-within label {
     color: var(--primary);
   }
