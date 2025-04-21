@@ -1,5 +1,6 @@
+<!-- views/checkpoint.ejs -->
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,8 +23,10 @@
 
   <!-- Linkvertise API -->
   <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-  <script>linkvertise(572754, {whitelist: [], blacklist: [""]});</script>
-
+  <script>
+    const linkvertiseId = '<%= locals.linkvertiseId || "" %>';
+    linkvertise(linkvertiseId, {whitelist: [], blacklist: [""]});
+  </script>
   <style>
     body {
       background: linear-gradient(135deg, #1a103c, #2e1065, #3c096c);
@@ -175,7 +178,7 @@
       font-weight: bold;
     }
     
-    /* Floating animation for profile image */
+    
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-10px) rotate(2deg); }
@@ -232,7 +235,7 @@
       opacity: 0.8;
     }
 
-    /* คำแนะนำการใช้ Linkvertise */
+    
     .linkvertise-guide {
       background: rgba(255, 255, 255, 0.12);
       border-radius: 1rem;
@@ -330,7 +333,7 @@
       position: relative;
     }
     
-    /* สไตล์ปุ่มแนะนำวิธีการดูโฆษณาที่เน้นการกด I'm interested */
+    
     .tutorial-button {
       background: linear-gradient(135deg, #ff69b4, #8a2be2);
       color: white;
@@ -437,7 +440,7 @@
           </div>
         </div>
 
-        <!-- ปุ่มดูวิธีการดูโฆษณาที่ถูกต้อง (แสดงเฉพาะ checkpoint แรก) -->
+        
         <% if (checkpoint == 1) { %>
         <button id="openTutorial" class="tutorial-button" data-aos="fade-up" data-aos-delay="500">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

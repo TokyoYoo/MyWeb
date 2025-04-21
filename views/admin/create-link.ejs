@@ -1,9 +1,11 @@
+<!-- views/admin/create-link.ejs -->
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Mod - Preview</title>
+  <title>Free Mod - Create Link</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ตัวแปรสี */
     :root {
@@ -132,6 +134,33 @@
       width: 100%;
       text-align: center;
     }
+    
+    .btn-add {
+      background-color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .btn-add:hover {
+      background-color: #4caf50;
+    }
+    
+    .btn-remove {
+      background-color: var(--danger);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+    
+    .btn-remove:hover {
+      background-color: #e53935;
+    }
 
     /* ฟอร์ม */
     .form-group {
@@ -147,6 +176,7 @@
 
     input[type="text"],
     input[type="url"],
+    textarea,
     input[type="password"] {
       width: 100%;
       padding: 12px 15px;
@@ -158,6 +188,7 @@
 
     input[type="text"]:focus,
     input[type="url"]:focus,
+    textarea:focus,
     input[type="password"]:focus {
       border-color: var(--primary-light);
       outline: none;
@@ -181,6 +212,45 @@
       display: flex;
       justify-content: flex-end;
     }
+    
+    /* สคริปต์คอนเทนเนอร์ */
+    .scripts-container {
+      margin-top: 20px;
+    }
+    
+    .script-item {
+      background-color: #f9f7fd;
+      border: 1px solid #e8e0f7;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .script-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    
+    .script-title {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 18px;
+    }
+    
+    .script-item .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .script-actions {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
 
     /* แจ้งเตือน */
     .alert {
@@ -193,49 +263,6 @@
       background-color: rgba(244, 67, 54, 0.1);
       border-left: 4px solid var(--danger);
       color: var(--danger);
-    }
-
-    /* หน้าล็อกอิน */
-    .login-page {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 70vh;
-    }
-
-    .login-form-container {
-      background-color: var(--card-bg);
-      border-radius: 15px;
-      padding: 30px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: 0 5px 30px var(--shadow);
-      border-top: 5px solid var(--primary);
-      position: relative;
-    }
-
-    .login-form-container:before {
-      content: '🔐';
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.5rem;
-      background: white;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      box-shadow: 0 2px 10px var(--shadow);
-    }
-
-    .login-form-container h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: var(--primary);
-      font-size: 1.8rem;
     }
 
     /* สร้าง/แก้ไขลิงก์ */
@@ -272,39 +299,6 @@
       border-radius: 3px;
     }
 
-    /* สถิติ */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    .stat-item {
-      background-color: var(--secondary-light);
-      border-radius: 8px;
-      padding: 12px 15px;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s ease;
-    }
-
-    .stat-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px var(--shadow);
-    }
-
-    .stat-label {
-      color: var(--text-light);
-      font-size: 0.875rem;
-    }
-
-    .stat-value {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--primary);
-    }
-
     /* ฟุตเตอร์ */
     footer {
       text-align: center;
@@ -314,25 +308,15 @@
       font-size: 0.875rem;
     }
 
-    /* ทัชเอฟเฟกต์สำหรับมือถือ */
-    @media (hover: none) {
-      .btn:active {
-        transform: scale(0.98);
-      }
-    }
-
     /* รีสปอนซีฟ */
     @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      
       .form-actions {
         flex-direction: column;
       }
       
       .form-actions .btn {
         width: 100%;
+        margin-bottom: 10px;
       }
     }
 
@@ -347,49 +331,6 @@
         width: 100%;
         justify-content: center;
       }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* น่ารักเล็กน้อย */
-    .btn {
-      border-radius: 12px;
-    }
-
-    input {
-      border-radius: 10px;
-    }
-
-    .create-link-form button, 
-    .edit-link-form button, 
-    .login-form button {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .create-link-form button:after, 
-    .edit-link-form button:after, 
-    .login-form button:after {
-      content: '✨';
-      position: absolute;
-      top: 50%;
-      left: 15px;
-      transform: translateY(-50%);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    .create-link-form button:hover:after, 
-    .edit-link-form button:hover:after, 
-    .login-form button:hover:after {
-      opacity: 1;
-    }
-
-    /* เอฟเฟกต์เมื่อโฮเวอร์ */
-    .form-group:focus-within label {
-      color: var(--primary);
     }
   </style>
 </head>
@@ -406,33 +347,69 @@
       </div>
     </header>
 
-    <!-- Preview the link creation page -->
+    <!-- Create link page -->
     <main class="create-link-page">
       <h1>Create a new link</h1>
       
       <div class="alert alert-danger">
-        Please fill out the information completely.
+        Please fill out the information completely. Each mod requires at least one script.
       </div>
       
       <form action="/admin/create-link" method="POST" class="create-link-form">
         <div class="form-group">
-          <label for="name">Script Name *</label>
-          <input type="text" id="name" name="name" placeholder="Enter the name of the desired script." required>
+          <label for="name">Mod Name *</label>
+          <input type="text" id="name" name="name" placeholder="Enter the name of the mod" required>
         </div>
         
         <div class="form-group">
-          <label for="originalLink">Script Link*</label>
-          <input type="url" id="originalLink" name="originalLink" placeholder="https://..." required>
-        </div>
-        
-        <div class="form-group">
-          <label for="image">Image link (optional)</label>
+          <label for="image">Mod Image URL (optional)</label>
           <input type="url" id="image" name="image" placeholder="https://...">
           <small>If not specified, the default image will be used.</small>
         </div>
         
+        <h3 style="margin: 30px 0 15px; color: var(--primary);">Scripts</h3>
+        <p style="margin-bottom: 20px; color: var(--text-light);">Add up to 3 scripts that users can download</p>
+        
+        <div id="scripts-container" class="scripts-container">
+          <!-- Initial script item -->
+          <div class="script-item" data-script-index="0">
+            <div class="script-item-header">
+              <h4 class="script-title">Script 1</h4>
+              <div class="script-actions">
+                <button type="button" class="btn-remove" onclick="removeScript(this)" style="display: none;">&times;</button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="scriptName0">Script Name *</label>
+              <input type="text" id="scriptName0" name="scripts[0][name]" placeholder="Enter script name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="scriptLink0">Script Download Link *</label>
+              <input type="url" id="scriptLink0" name="scripts[0][link]" placeholder="https://..." required>
+            </div>
+            
+            <div class="form-group">
+              <label for="scriptImage0">Script Image URL (optional)</label>
+              <input type="url" id="scriptImage0" name="scripts[0][image]" placeholder="https://...">
+            </div>
+            
+            <div class="form-group">
+              <label for="scriptDesc0">Script Description (optional)</label>
+              <textarea id="scriptDesc0" name="scripts[0][description]" rows="3" placeholder="Briefly describe this script"></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 10px;">
+          <button type="button" id="add-script-btn" class="btn btn-add" onclick="addScript()">
+            <span style="font-size: 18px;">+</span> Add Another Script
+          </button>
+        </div>
+        
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Create a link</button>
+          <button type="submit" class="btn btn-primary">Create Link</button>
         </div>
       </form>
     </main>
@@ -441,5 +418,117 @@
       <p>&copy; 2025 Free Mod. All rights reserved. Made with ❤️</p>
     </footer>
   </div>
+
+  <script>
+    let scriptCount = 1;
+    const MAX_SCRIPTS = 3;
+    
+    function addScript() {
+      if (scriptCount >= MAX_SCRIPTS) {
+        alert('You can add a maximum of ' + MAX_SCRIPTS + ' scripts.');
+        return;
+      }
+      
+      const container = document.getElementById('scripts-container');
+      const index = scriptCount;
+      
+      const scriptItem = document.createElement('div');
+      scriptItem.className = 'script-item';
+      scriptItem.dataset.scriptIndex = index;
+      
+      scriptItem.innerHTML = `
+        <div class="script-item-header">
+          <h4 class="script-title">Script ${index + 1}</h4>
+          <div class="script-actions">
+            <button type="button" class="btn-remove" onclick="removeScript(this)">&times;</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="scriptName${index}">Script Name *</label>
+          <input type="text" id="scriptName${index}" name="scripts[${index}][name]" placeholder="Enter script name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="scriptLink${index}">Script Download Link *</label>
+          <input type="url" id="scriptLink${index}" name="scripts[${index}][link]" placeholder="https://..." required>
+        </div>
+        
+        <div class="form-group">
+          <label for="scriptImage${index}">Script Image URL (optional)</label>
+          <input type="url" id="scriptImage${index}" name="scripts[${index}][image]" placeholder="https://...">
+        </div>
+        
+        <div class="form-group">
+          <label for="scriptDesc${index}">Script Description (optional)</label>
+          <textarea id="scriptDesc${index}" name="scripts[${index}][description]" rows="3" placeholder="Briefly describe this script"></textarea>
+        </div>
+      `;
+      
+      container.appendChild(scriptItem);
+      scriptCount++;
+      
+      // Show remove button on first script if there's more than one script
+      if (scriptCount > 1) {
+        document.querySelector('.script-item[data-script-index="0"] .btn-remove').style.display = 'block';
+      }
+      
+      // Hide add button if max scripts reached
+      if (scriptCount >= MAX_SCRIPTS) {
+        document.getElementById('add-script-btn').style.display = 'none';
+      }
+    }
+    
+    function removeScript(button) {
+      const scriptItem = button.closest('.script-item');
+      const index = parseInt(scriptItem.dataset.scriptIndex);
+      
+      scriptItem.remove();
+      scriptCount--;
+      
+      // Renumber remaining scripts
+      const scripts = document.querySelectorAll('.script-item');
+      scripts.forEach((script, i) => {
+        const scriptIndex = parseInt(script.dataset.scriptIndex);
+        if (scriptIndex > index) {
+          // Update displayed title
+          script.querySelector('.script-title').textContent = `Script ${i + 1}`;
+          
+          // Update data attribute
+          script.dataset.scriptIndex = i;
+          
+          // Update input names and IDs
+          const inputs = script.querySelectorAll('input, textarea');
+          inputs.forEach(input => {
+            const name = input.getAttribute('name');
+            const id = input.getAttribute('id');
+            
+            input.setAttribute('name', name.replace(/scripts\[\d+\]/, `scripts[${i}]`));
+            input.setAttribute('id', id.replace(/\d+$/, i));
+          });
+          
+          // Update labels
+          const labels = script.querySelectorAll('label');
+          labels.forEach(label => {
+            const forAttr = label.getAttribute('for');
+            label.setAttribute('for', forAttr.replace(/\d+$/, i));
+          });
+        }
+      });
+      
+      // Hide remove button on first script if there's only one script left
+      if (scriptCount === 1) {
+        const firstRemoveBtn = document.querySelector('.script-item .btn-remove');
+        if (firstRemoveBtn) {
+          firstRemoveBtn.style.display = 'none';
+        }
+      }
+      
+      // Show add button if we're below max
+      if (scriptCount < MAX_SCRIPTS) {
+        document.getElementById('add-script-btn').style.display = 'inline-flex';
+      }
+    }
+  </script>
 </body>
 </html>
