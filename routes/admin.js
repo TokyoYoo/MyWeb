@@ -6,7 +6,8 @@ const shortid = require('shortid');
 const Mod = require('../models/Mod');
 const User = require('../models/User');
 const auth = require('../middlewares/auth');
-const LinkvertiseConfig = require('../models/LinkvertiseConfig');
+const { ensureAuthenticated, ensureAdmin } = require('../middleware/auth');
+const settingsController = require('../controllers/settingsController');
 
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
@@ -16,9 +17,6 @@ const isAdmin = (req, res, next) => {
   return res.redirect('/admin/login');
 };
 
-// Login verification function (modified from ensureAuthenticated to isAdmin)
-const ensureAuthenticated = isAdmin;
-
 // Admin login page
 router.get('/login', (req, res) => {
   if (req.session.user && req.session.user.isAdmin) {
@@ -27,7 +25,7 @@ router.get('/login', (req, res) => {
   res.render('admin/login', { title: 'Admin Login' });
 });
 
-// Admin login processing
+// Admin login process
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -62,7 +60,7 @@ router.post('/login', async (req, res) => {
     console.error(err);
     res.render('admin/login', { 
       title: 'Admin Login',
-      error: 'Server error occurred' 
+      error: 'Server error' 
     });
   }
 });
@@ -77,7 +75,7 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error occurred');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -86,12 +84,12 @@ router.get('/create-link', isAdmin, (req, res) => {
   res.render('admin/create-link', { title: 'Create New Link' });
 });
 
-// Link creation processing
+// Create link process
 router.post('/create-link', isAdmin, async (req, res) => {
   try {
     const { name, originalLink, image } = req.body;
     
-    // Create short ID
+    // Generate short ID
     const shortId = shortid.generate();
     
     const newMod = new Mod({
@@ -125,7 +123,7 @@ router.get('/edit/:id', isAdmin, async (req, res) => {
     res.render('admin/edit-link', { title: 'Edit Link', mod });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error occurred');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -143,7 +141,7 @@ router.put('/edit/:id', isAdmin, async (req, res) => {
     res.redirect('/admin/dashboard');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error occurred');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -154,7 +152,7 @@ router.delete('/delete/:id', isAdmin, async (req, res) => {
     res.redirect('/admin/dashboard');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error occurred');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -164,199 +162,79 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// Settings page (modified from ensureAuthenticated to isAdmin)
-router.get('/settings', isAdmin, async (req, res) => {
-  try {
-    // Retrieve Linkvertise ID from database
-    let linkvertiseConfig = await LinkvertiseConfig.findOne();
-    
-    // If no data exists, create default value
-    if (!linkvertiseConfig) {
-      linkvertiseConfig = { linkvertiseId: '' };
-    }
-    
-    res.render('admin/settings', {
-      title: 'Settings',
-      user: req.session.user,
-      linkvertiseId: linkvertiseConfig.linkvertiseId,
-      success: req.flash ? req.flash('success') : null,
-      error: req.flash ? req.flash('error') : null,
-      activeTab: req.flash && req.flash('activeTab') ? req.flash('activeTab')[0] : 'account'
-    });
-  } catch (err) {
-    console.error(err);
-    if (req.flash) {
-      req.flash('error', 'Error loading data');
-    }
-    res.redirect('/admin/dashboard');
-  }
+// เพิ่มส่วนนี้ก่อน module.exports = router; ในไฟล์ routes/admin.js
+
+// หน้าตั้งค่า
+router.get('/settings', isAdmin, (req, res) => {
+  res.render('admin/settings', { 
+    title: 'ตั้งค่าระบบ',
+    user: req.session.user
+  });
 });
 
-// Change password from settings page
+// เปลี่ยนรหัสผ่านจากหน้าตั้งค่า
 router.post('/settings/change-password', isAdmin, async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     
-    // Check if new passwords match
+    // ตรวจสอบว่ารหัสผ่านใหม่ตรงกัน
     if (newPassword !== confirmPassword) {
       return res.render('admin/settings', {
-        title: 'System Settings',
+        title: 'ตั้งค่าระบบ',
         user: req.session.user,
-        error: 'New passwords do not match',
+        error: 'รหัสผ่านใหม่ไม่ตรงกัน',
         activeTab: 'password'
       });
     }
     
-    // Find user from session ID
+    // หาผู้ใช้จาก ID ในเซสชัน
     const user = await User.findById(req.session.user.id);
     if (!user) {
       return res.render('admin/settings', {
-        title: 'System Settings',
+        title: 'ตั้งค่าระบบ',
         user: req.session.user,
-        error: 'User not found',
+        error: 'ไม่พบผู้ใช้',
         activeTab: 'password'
       });
     }
     
-    // Check current password
+    // ตรวจสอบรหัสผ่านปัจจุบัน
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.render('admin/settings', {
-        title: 'System Settings',
+        title: 'ตั้งค่าระบบ',
         user: req.session.user,
-        error: 'Current password is incorrect',
+        error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
         activeTab: 'password'
       });
     }
     
-    // Encrypt and save new password
+    // เข้ารหัสและบันทึกรหัสผ่านใหม่
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
     
     return res.render('admin/settings', {
-      title: 'System Settings',
+      title: 'ตั้งค่าระบบ',
       user: req.session.user,
-      success: 'Password changed successfully',
+      success: 'เปลี่ยนรหัสผ่านสำเร็จ',
       activeTab: 'password'
     });
   } catch (err) {
     console.error(err);
     res.render('admin/settings', {
-      title: 'System Settings',
+      title: 'ตั้งค่าระบบ',
       user: req.session.user,
-      error: 'Server error occurred',
+      error: 'เกิดข้อผิดพลาดในเซิร์ฟเวอร์',
       activeTab: 'password'
     });
   }
 });
 
-// Update Linkvertise ID
-router.post('/settings/update-linkvertise', isAdmin, async (req, res) => {
-  try {
-    const { linkvertiseId } = req.body;
-    
-    if (!linkvertiseId) {
-      if (req.flash) {
-        req.flash('error', 'Please specify Linkvertise ID');
-        req.flash('activeTab', 'linkvertise');
-      }
-      return res.redirect('/admin/settings');
-    }
-    
-    // Update Linkvertise ID
-    const config = await LinkvertiseConfig.findOne();
-    if (config) {
-      config.linkvertiseId = linkvertiseId;
-      config.updatedAt = Date.now();
-      await config.save();
-    } else {
-      await LinkvertiseConfig.create({
-        linkvertiseId: linkvertiseId
-      });
-    }
-    
-    if (req.flash) {
-      req.flash('success', 'Linkvertise ID updated successfully');
-      req.flash('activeTab', 'linkvertise');
-    }
-    res.redirect('/admin/settings');
-  } catch (err) {
-    console.error(err);
-    if (req.flash) {
-      req.flash('error', 'Error updating Linkvertise ID');
-      req.flash('activeTab', 'linkvertise');
-    }
-    res.redirect('/admin/settings');
-  }
-});
+router.get('/settings', ensureAuthenticated, settingsController.showSettings);
 
-// แสดงหน้าแก้ไขลิงก์
-router.get('/edit-link/:id', ensureAuthenticated, async (req, res) => {
-  try {
-    const mod = await Mod.findById(req.params.id);
-    
-    if (!mod) {
-      return res.status(404).redirect('/admin/dashboard');
-    }
-    
-    // สร้าง URL สำหรับแชร์
-    const shareUrl = `${req.protocol}://${req.get('host')}/mod/${mod.shortId}`;
-    
-    res.render('admin/edit-link', {
-      title: `Edit: ${mod.name}`,
-      mod,
-      shareUrl,
-      message: req.flash('message')
-    });
-  } catch (err) {
-    console.error(err);
-    req.flash('message', { type: 'danger', text: 'Error loading mod data' });
-    res.redirect('/admin/dashboard');
-  }
-});
+router.post('/settings/change-password', ensureAuthenticated, /* passwordChangeController */);
 
-// บันทึกการแก้ไขลิงก์
-router.post('/edit-link/:id', ensureAuthenticated, async (req, res) => {
-  try {
-    const { name, image, scripts } = req.body;
-    
-    // แปลงข้อมูลสคริปต์จากฟอร์มให้อยู่ในรูปแบบ array
-    let scriptsArray = [];
-    
-    // ตรวจสอบว่า scripts เป็น array หรือ object เดี่ยว
-    if (Array.isArray(scripts)) {
-      scriptsArray = scripts;
-    } else if (typeof scripts === 'object') {
-      // กรณีมีสคริปต์เดียว หรือรูปแบบของข้อมูลเป็น object
-      const scriptKeys = Object.keys(scripts).sort();
-      
-      for (const key of scriptKeys) {
-        scriptsArray.push(scripts[key]);
-      }
-    }
-    
-    // ตรวจสอบและแน่ใจว่ามีอย่างน้อย 1 สคริปต์
-    if (!scriptsArray || scriptsArray.length === 0) {
-      req.flash('message', { type: 'danger', text: 'At least one script is required' });
-      return res.redirect(`/admin/edit-link/${req.params.id}`);
-    }
-    
-    // อัปเดตข้อมูลในฐานข้อมูล
-    await Mod.findByIdAndUpdate(req.params.id, {
-      name,
-      image: image || null,
-      scripts: scriptsArray,
-      updatedAt: Date.now()
-    });
-    
-    req.flash('message', { type: 'success', text: 'Link updated successfully' });
-    res.redirect(`/admin/edit-link/${req.params.id}`);
-  } catch (err) {
-    console.error(err);
-    req.flash('message', { type: 'danger', text: 'Error updating link' });
-    res.redirect(`/admin/edit-link/${req.params.id}`);
-  }
-});
+router.post('/settings/update-ads', ensureAuthenticated, settingsController.updateAdsSettings);
 
 module.exports = router;

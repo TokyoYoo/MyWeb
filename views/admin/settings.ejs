@@ -1,6 +1,6 @@
-<!-- views/admin/settings.ejs -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,12 +120,12 @@
     <!-- Sidebar -->
     <aside class="dashboard-sidebar">
       <div class="sidebar-header">
-        <h2>System Settings</h2>
+        <h2>My Name Is Mr.M No.1</h2>
       </div>
       <nav class="sidebar-nav">
         <ul>
           <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
-          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create New Link</a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
           <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> Settings</a></li>
           <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -139,12 +139,12 @@
     <main class="dashboard-main">
       <header class="main-header">
         <div class="header-left"> 
-          <h1>System Settings</h1>
-          <p class="date-display"><%= new Date().toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
+          <h1>Set up the system</h1>
+          <p class="date-display"><%= new Date().toLocaleDateString('en-EN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
         </div>
         <div class="header-right">
           <div class="user-menu">
-            <span class="user-greeting">Hello, <%= user.username %></span>
+            <span class="user-greeting">Yoo, <%= user.username %></span>
             <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </div>
@@ -153,31 +153,28 @@
       <!-- Settings Content -->
       <section class="settings-section">
         <div class="settings-tabs">
-          <div class="tab-item <%= !locals.activeTab || locals.activeTab === 'account' ? 'active' : '' %>" data-tab="account">
-            <i class="fas fa-user-circle"></i> User Account
+          <div class="tab-item active" data-tab="account">
+            <i class="fas fa-user-circle"></i> User account
           </div>
-          <div class="tab-item <%= locals.activeTab === 'password' ? 'active' : '' %>" data-tab="password">
-            <i class="fas fa-key"></i> Change Password
+          <div class="tab-item" data-tab="password">
+            <i class="fas fa-key"></i> Change password
           </div>
-          <div class="tab-item <%= locals.activeTab === 'website' ? 'active' : '' %>" data-tab="website">
-            <i class="fas fa-globe"></i> Website Settings
-          </div>
-          <div class="tab-item <%= locals.activeTab === 'linkvertise' ? 'active' : '' %>" data-tab="linkvertise">
-            <i class="fas fa-link"></i> Linkvertise Settings
+          <div class="tab-item" data-tab="website">
+            <i class="fas fa-globe"></i> Set up website
           </div>
         </div>
 
         <!-- Account Settings -->
-        <div id="account" class="tab-content <%= !locals.activeTab || locals.activeTab === 'account' ? 'active' : '' %>">
+        <div id="account" class="tab-content active">
           <div class="settings-card">
-            <h3>Account Information</h3>
+            <h3>Account information</h3>
             <div class="form-group">
-              <label>Username</label>
+              <label>User name</label>
               <input type="text" class="form-control" value="<%= user.username %>" readonly>
             </div>
             <div class="form-group">
-              <label>Status</label>
-              <input type="text" class="form-control" value="<%= user.isAdmin ? 'Administrator' : 'Member' %>" readonly>
+              <label>status</label>
+              <input type="text" class="form-control" value="<%= user.isAdmin ? 'Admin' : 'member' %>" readonly>
             </div>
           </div>
         </div>
@@ -185,7 +182,7 @@
         <!-- Password Settings -->
         <div id="password" class="tab-content <%= locals.activeTab === 'password' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>Change Password</h3>
+            <h3>Change password</h3>
             
             <% if(locals.error && locals.activeTab === 'password'){ %>
               <div class="alert alert-danger"><%= error %></div>
@@ -196,18 +193,18 @@
             
             <form action="/admin/settings/change-password" method="POST">
               <div class="form-group">
-                <label for="currentPassword">Current Password</label>
+                <label for="currentPassword">Current password</label>
                 <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="newPassword">New Password</label>
+                <label for="newPassword">New password</label>
                 <input type="password" id="newPassword" name="newPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="confirmPassword">Confirm New Password</label>
+                <label for="confirmPassword">Confirm new password</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
               </div>
-              <button type="submit" class="btn btn-primary">Save New Password</button>
+              <button type="submit" class="btn btn-primary">Save the new password.</button>
             </form>
           </div>
         </div>
@@ -215,46 +212,76 @@
         <!-- Website Settings -->
         <div id="website" class="tab-content <%= locals.activeTab === 'website' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>Website Settings</h3>
-            <p>Coming Soon</p>
-          </div>
-        </div>
-
-        <!-- Linkvertise Settings -->
-        <div id="linkvertise" class="tab-content <%= locals.activeTab === 'linkvertise' ? 'active' : '' %>">
-          <div class="settings-card">
-            <h3>Linkvertise Settings</h3>
+            <h3>ตั้งค่าระบบโฆษณา</h3>
             
-            <% if(locals.error && locals.activeTab === 'linkvertise'){ %>
+            <% if(locals.error && locals.activeTab === 'website'){ %>
               <div class="alert alert-danger"><%= error %></div>
             <% } %>
-            <% if(locals.success && locals.activeTab === 'linkvertise'){ %>
+            <% if(locals.success && locals.activeTab === 'website'){ %>
               <div class="alert alert-success"><%= success %></div>
             <% } %>
             
-            <div style="background-color: rgba(126, 87, 194, 0.1); border-left: 4px solid #7e57c2; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
-              <p>Enter your Linkvertise Publisher ID below. This ID will be used on all checkpoint pages.</p>
-              <p><strong>Note:</strong> You can find your Publisher ID in your Linkvertise dashboard.</p>
-            </div>
-            
-            <form action="/admin/settings/update-linkvertise" method="POST">
+            <form action="/admin/settings/update-ads" method="POST">
               <div class="form-group">
-                <label for="linkvertiseId">Linkvertise Publisher ID</label>
-                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= locals.linkvertiseId || '572754' %>" required>
+                <label for="linkvertiseId">Linkvertise ID</label>
+                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= settings ? settings.linkvertiseId : '572754' %>" required>
+                <small class="text-gray-400">ตัวอย่าง: 572754</small>
               </div>
-              <button type="submit" class="btn btn-primary">Save Changes</button>
+              
+              <div class="form-group">
+                <label for="workinkUrl">Work.ink URL</label>
+                <input type="text" id="workinkUrl" name="workinkUrl" class="form-control" value="<%= settings ? settings.workinkUrl : 'https://work.ink/1Zga/m9rbrvua' %>" required>
+                <small class="text-gray-400">ตัวอย่าง: https://work.ink/1Zga/m9rbrvua</small>
+              </div>
+              
+              <div class="form-group">
+                <h4 class="mb-3 mt-4">ตั้งค่าเริ่มต้นของระบบโฆษณา</h4>
+                <p class="text-gray-400 mb-3">การตั้งค่านี้จะเป็นค่าเริ่มต้นสำหรับลิงก์ใหม่ที่สร้างขึ้น</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <!-- Checkpoint 1 -->
+                  <div class="p-4 border border-gray-600 rounded-lg">
+                    <h5 class="font-medium mb-2">Checkpoint 1</h5>
+                    <select name="defaultCheckpoint1" class="form-control">
+                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint1 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= settings && settings.defaultCheckpoint1 === 'workink' ? 'selected' : '' %>>Work.ink</option>
+                      <option value="none" <%= settings && settings.defaultCheckpoint1 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
+                    </select>
+                  </div>
+                  
+                  <!-- Checkpoint 2 -->
+                  <div class="p-4 border border-gray-600 rounded-lg">
+                    <h5 class="font-medium mb-2">Checkpoint 2</h5>
+                    <select name="defaultCheckpoint2" class="form-control">
+                      <option value="none" <%= settings && settings.defaultCheckpoint2 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
+                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint2 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= settings && settings.defaultCheckpoint2 === 'workink' ? 'selected' : '' %>>Work.ink</option>
+                    </select>
+                  </div>
+                  
+                  <!-- Checkpoint 3 -->
+                  <div class="p-4 border border-gray-600 rounded-lg">
+                    <h5 class="font-medium mb-2">Checkpoint 3</h5>
+                    <select name="defaultCheckpoint3" class="form-control">
+                      <option value="none" <%= settings && settings.defaultCheckpoint3 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
+                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint3 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= settings && settings.defaultCheckpoint3 === 'workink' ? 'selected' : '' %>>Work.ink</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary mt-4">บันทึกการตั้งค่า</button>
             </form>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
 
   <!-- JavaScript for tabs -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const tabItems = document.querySelectorAll('.tab-item');
       const tabContents = document.querySelectorAll('.tab-content');
+      
       
       function switchTab(tabId) {
         
@@ -270,7 +297,7 @@
         
         document.getElementById(tabId).classList.add('active');
         
-      
+        
         document.querySelector(`.tab-item[data-tab="${tabId}"]`).classList.add('active');
       }
       

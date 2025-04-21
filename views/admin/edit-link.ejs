@@ -4,16 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Link</title>
+  <title><%= title %> - Free Mod</title>
+  <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ตัวแปรสี */
+    /* สไตล์สำหรับหน้า edit-link */
     :root {
       --primary: #7e57c2;
       --primary-light: #b085f5;
       --primary-dark: #4d2c91;
       --secondary: #ffb74d;
-      --secondary-light: #ffe9ca;
       --background: #f8f9fa;
       --card-bg: #ffffff;
       --text: #333333;
@@ -21,637 +21,388 @@
       --success: #66bb6a;
       --danger: #ef5350;
       --border: #e0e0e0;
-      --shadow: rgba(0, 0, 0, 0.05);
     }
-
-    /* Reset และฟอนต์พื้นฐาน */
+    
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
+    
     body {
-      font-family: 'Prompt', 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--background);
+      font-family: 'Prompt', sans-serif;
+      background-color: #f5f7fa;
       color: var(--text);
       line-height: 1.6;
     }
-
-    /* คอนเทนเนอร์ */
+    
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
     }
-
-    /* เฮดเดอร์ */
-    header {
-      background-color: var(--card-bg);
-      padding: 15px 0;
-      box-shadow: 0 2px 10px var(--shadow);
-      margin-bottom: 30px;
-      border-radius: 0 0 15px 15px;
-    }
-
+    
     .admin-header {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      padding: 15px 20px;
+      padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
-      border-radius: 0 0 15px 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
     }
-
+    
+    .admin-header:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      opacity: 0.5;
+    }
+    
     .logo a {
-      font-size: 1.5rem;
+      font-size: 22px;
       font-weight: 700;
-      color: var(--primary);
+      color: white;
       text-decoration: none;
       display: flex;
       align-items: center;
+      position: relative;
     }
-
-    .admin-header .logo a {
-      color: white;
-    }
-
+    
     .logo a:before {
       content: '✨';
       margin-right: 8px;
-      font-size: 1.2rem;
+      font-size: 18px;
     }
-
+    
     .admin-nav {
       display: flex;
       gap: 12px;
     }
-
-    /* ปุ่ม */
+    
     .btn {
       display: inline-block;
       padding: 10px 18px;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      border-radius: 12px;
       font-weight: 500;
+      font-size: 15px;
       text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 1rem;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+      text-align: center;
     }
-
-    .btn:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
+    
     .btn-sm {
-      padding: 6px 12px;
-      font-size: 0.875rem;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
     }
-
+    
     .btn-primary {
       background-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(126, 87, 194, 0.2);
     }
-
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(126, 87, 194, 0.3);
+    }
+    
     .btn-outline {
-      background-color: transparent;
-      border: 2px solid white;
-    }
-
-    .btn-outline:hover {
       background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .btn-block {
-      display: block;
-      width: 100%;
-      text-align: center;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
     
-    .btn-add {
-      background-color: var(--success);
-      display: flex;
-      align-items: center;
-      gap: 5px;
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
     }
     
-    .btn-add:hover {
-      background-color: #4caf50;
-    }
-    
-    .btn-remove {
-      background-color: var(--danger);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border-radius: 50%;
-      font-size: 18px;
-    }
-    
-    .btn-remove:hover {
-      background-color: #e53935;
-    }
-
-    /* ฟอร์ม */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    input[type="text"],
-    input[type="url"],
-    textarea,
-    input[type="password"] {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    input[type="text"]:focus,
-    input[type="url"]:focus,
-    textarea:focus,
-    input[type="password"]:focus {
-      border-color: var(--primary-light);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
-    }
-
-    small {
-      display: block;
-      margin-top: 5px;
-      color: var(--text-light);
-      font-size: 0.875rem;
-    }
-
-    .form-static-text {
-      padding: 10px 0;
-      font-weight: 500;
-    }
-
-    .form-actions {
-      margin-top: 30px;
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    /* สคริปต์คอนเทนเนอร์ */
-    .scripts-container {
-      margin-top: 20px;
-    }
-    
-    .script-item {
-      background-color: #f9f7fd;
-      border: 1px solid #e8e0f7;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+    .edit-link-page {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin-bottom: 40px;
       position: relative;
+      overflow: hidden;
     }
     
-    .script-item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
+    .edit-link-page:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
     }
     
-    .script-title {
+    .edit-link-page h1 {
+      font-size: 24px;
       font-weight: 600;
       color: var(--primary);
-      font-size: 18px;
-    }
-    
-    .script-item .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .script-actions {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-    }
-
-    /* แจ้งเตือน */
-    .alert {
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .alert-danger {
-      background-color: rgba(244, 67, 54, 0.1);
-      border-left: 4px solid var(--danger);
-      color: var(--danger);
-    }
-
-    .alert-success {
-      background-color: rgba(102, 187, 106, 0.1);
-      border-left: 4px solid var(--success);
-      color: var(--success);
-    }
-
-    /* สร้าง/แก้ไขลิงก์ */
-    .create-link-page,
-    .edit-link-page {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: var(--card-bg);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 5px 20px var(--shadow);
-    }
-
-    .create-link-page h1,
-    .edit-link-page h1 {
-      margin-bottom: 25px;
-      color: var(--primary);
-      font-size: 1.8rem;
+      margin-bottom: 30px;
       text-align: center;
       position: relative;
-      padding-bottom: 15px;
+      padding-bottom: 12px;
     }
-
-    .create-link-page h1:after,
+    
     .edit-link-page h1:after {
       content: '';
       position: absolute;
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 100px;
+      width: 80px;
       height: 3px;
       background: linear-gradient(to right, var(--primary-light), var(--primary));
       border-radius: 3px;
     }
-
-    /* ฟุตเตอร์ */
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      padding: 20px 0;
+    
+    .form-group {
+      margin-bottom: 24px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 15px;
+    }
+    
+    input[type="text"],
+    input[type="url"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e4e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background-color: #f8f9fa;
+    }
+    
+    input[type="text"]:focus,
+    input[type="url"]:focus {
+      border-color: var(--primary-light);
+      background-color: #fff;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.1);
+    }
+    
+    small {
+      display: block;
+      margin-top: 6px;
       color: var(--text-light);
-      font-size: 0.875rem;
+      font-size: 13px;
     }
-
-    /* สถิติ */
-    .stats-box {
-      background-color: #f9f7fd;
+    
+    .form-static-text {
+      padding: 10px 16px;
+      background-color: #f8f9fa;
       border-radius: 10px;
-      padding: 15px;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 6px;
+      border-left: 3px solid var(--primary-light);
+    }
+    
+    .form-actions {
+      margin-top: 32px;
       display: flex;
-      gap: 15px;
-      margin-bottom: 30px;
+      justify-content: center;
     }
-
+    
+    .form-actions .btn {
+      min-width: 180px;
+    }
+    
+    .alert-danger {
+      background-color: #fff2f0;
+      border-left: 4px solid #ff4d4f;
+      color: #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    
     .stat-item {
-      flex: 1;
-      text-align: center;
+      background-color: #fdf9ff;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(126, 87, 194, 0.1);
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
     }
-
+    
+    .stat-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      border-color: rgba(126, 87, 194, 0.3);
+    }
+    
+    .stat-item:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-light), var(--primary));
+    }
+    
+    .stat-label {
+      color: var(--text-light);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    
     .stat-value {
-      font-size: 24px;
       font-weight: 700;
+      font-size: 20px;
       color: var(--primary);
     }
-
-    .stat-label {
-      font-size: 14px;
+    
+    footer {
+      text-align: center;
+      padding: 20px 0;
       color: var(--text-light);
+      font-size: 13px;
     }
-
-    /* ลิงก์แชร์ */
-    .share-link {
-      background-color: #f5f5f5;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 30px;
+    
+    footer p:after {
+      content: '❤️';
+      margin-left: 4px;
+      font-size: 12px;
     }
-
-    .share-link-header {
-      font-weight: 600;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .share-link-header:before {
-      content: '🔗';
-    }
-
-    .share-link-box {
-      display: flex;
-      gap: 10px;
-    }
-
-    .share-link-input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background-color: white;
-      font-size: 14px;
-    }
-
-    .copy-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .copy-btn:hover {
-      background-color: var(--primary-dark);
-    }
-
-    /* รีสปอนซีฟ */
+    
     @media (max-width: 768px) {
-      .form-actions {
-        flex-direction: column;
-        gap: 10px;
-      }
-      
-      .form-actions .btn {
-        width: 100%;
-      }
-
-      .share-link-box {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 480px) {
       .admin-header {
         flex-direction: column;
-        gap: 15px;
-        text-align: center;
+        gap: 16px;
+        padding: 20px;
       }
       
       .admin-nav {
         width: 100%;
         justify-content: center;
       }
-
-      .stats-box {
-        flex-direction: column;
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .edit-link-page {
+        padding: 20px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions .btn {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <header class="admin-header">
       <div class="logo">
-        <a href="/admin/dashboard">You Know Who I Am</a>
+        <a href="/admin/dashboard">Return to Dashboard</a>
       </div>
       <div class="admin-nav">
-        <a href="/admin/dashboard" class="btn btn-sm">Return to Dashboard</a>
+        <a href="/admin/dashboard" class="btn btn-sm">By @plus9995</a>
         <a href="/admin/logout" class="btn btn-sm btn-outline">Logout</a>
       </div>
     </header>
 
-    <!-- Edit link page -->
     <main class="edit-link-page">
-      <h1>Edit link</h1>
+      <h1>แก้ไขลิงก์</h1>
       
-      <% if (message) { %>
-        <div class="alert <%= message.type === 'success' ? 'alert-success' : 'alert-danger' %>">
-          <%= message.text %>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger">
+          <%= error %>
         </div>
       <% } %>
-
-      <!-- สถิติ -->
-      <div class="stats-box">
-        <div class="stat-item">
-          <div class="stat-value"><%= mod.clicks %></div>
-          <div class="stat-label">Total Clicks</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value"><%= mod.completedClicks %></div>
-          <div class="stat-label">Completed Downloads</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value"><%= ((mod.completedClicks / (mod.clicks || 1)) * 100).toFixed(1) %>%</div>
-          <div class="stat-label">Completion Rate</div>
-        </div>
-      </div>
-
-      <!-- ลิงก์แชร์ -->
-      <div class="share-link">
-        <div class="share-link-header">Share Link</div>
-        <div class="share-link-box">
-          <input type="text" id="shareLink" class="share-link-input" value="<%= shareUrl %>" readonly>
-          <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
-        </div>
-      </div>
       
-      <form action="/admin/edit-link/<%= mod._id %>" method="POST" class="edit-link-form">
+      <form action="/admin/edit/<%= mod._id %>?_method=PUT" method="POST" class="edit-link-form">
         <div class="form-group">
-          <label for="name">Mod Name *</label>
-          <input type="text" id="name" name="name" value="<%= mod.name %>" placeholder="Enter the name of the mod" required>
+          <label for="name">ชื่อมอด *</label>
+          <input type="text" id="name" name="name" value="<%= mod.name %>" required>
         </div>
         
         <div class="form-group">
-          <label for="image">Mod Image URL (optional)</label>
-          <input type="url" id="image" name="image" value="<%= mod.image || '' %>" placeholder="https://...">
-          <small>If not specified, the default image will be used.</small>
+          <label for="originalLink">ลิงก์มอดต้นฉบับ *</label>
+          <input type="url" id="originalLink" name="originalLink" value="<%= mod.originalLink %>" required>
         </div>
         
-        <h3 style="margin: 30px 0 15px; color: var(--primary);">Scripts</h3>
-        <p style="margin-bottom: 20px; color: var(--text-light);">Add up to 3 scripts that users can download</p>
+        <div class="form-group">
+          <label for="image">ลิงก์รูปภาพ (ไม่บังคับ)</label>
+          <input type="url" id="image" name="image" value="<%= mod.image %>">
+          <small>หากไม่ใส่ จะใช้รูปภาพเริ่มต้น</small>
+        </div>
         
-        <div id="scripts-container" class="scripts-container">
-          <% mod.scripts.forEach((script, index) => { %>
-            <div class="script-item" data-script-index="<%= index %>">
-              <div class="script-item-header">
-                <h4 class="script-title">Script <%= index + 1 %></h4>
-                <div class="script-actions">
-                  <button type="button" class="btn-remove" onclick="removeScript(this)" <%= mod.scripts.length === 1 ? 'style="display: none;"' : '' %>>&times;</button>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label for="scriptName<%= index %>">Script Name *</label>
-                <input type="text" id="scriptName<%= index %>" name="scripts[<%= index %>][name]" value="<%= script.name %>" placeholder="Enter script name" required>
-              </div>
-              
-              <div class="form-group">
-                <label for="scriptLink<%= index %>">Script Download Link *</label>
-                <input type="url" id="scriptLink<%= index %>" name="scripts[<%= index %>][link]" value="<%= script.link %>" placeholder="https://..." required>
-              </div>
-              
-              <div class="form-group">
-                <label for="scriptImage<%= index %>">Script Image URL (optional)</label>
-                <input type="url" id="scriptImage<%= index %>" name="scripts[<%= index %>][image]" value="<%= script.image || '' %>" placeholder="https://...">
-              </div>
-              
-              <div class="form-group">
-                <label for="scriptDesc<%= index %>">Script Description (optional)</label>
-                <textarea id="scriptDesc<%= index %>" name="scripts[<%= index %>][description]" rows="3" placeholder="Briefly describe this script"><%= script.description || '' %></textarea>
-              </div>
+        <div class="form-group">
+          <label>Short ID</label>
+          <p class="form-static-text"><%= mod.shortId %></p>
+          <small>URL ของลิงก์: <a href="/mod/<%= mod.shortId %>" target="_blank" style="color: var(--primary); text-decoration: none;">https://yourdomain.com/mod/<%= mod.shortId %></a></small>
+        </div>
+        
+        <div class="form-group">
+          <label>สถิติ</label>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">คลิก:</span>
+              <span class="stat-value"><%= mod.clicks %></span>
             </div>
-          <% }); %>
-        </div>
-        
-        <div style="text-align: center; margin-top: 10px;">
-          <button type="button" id="add-script-btn" class="btn btn-add" onclick="addScript()" <%= mod.scripts.length >= 3 ? 'style="display: none;"' : '' %>>
-            <span style="font-size: 18px;">+</span> Add Another Script
-          </button>
+            <div class="stat-item">
+              <span class="stat-label">ดาวน์โหลด:</span>
+              <span class="stat-value"><%= mod.completedClicks %></span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">สร้างเมื่อ:</span>
+              <span class="stat-value"><%= new Date(mod.createdAt).toLocaleString() %></span>
+            </div>
+          </div>
         </div>
         
         <div class="form-actions">
-          <a href="/admin/dashboard" class="btn btn-outline" style="background-color: #e0e0e0; color: var(--text);">Cancel</a>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary">บันทึกการแก้ไข</button>
         </div>
       </form>
     </main>
 
     <footer>
-      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved. Made with ❤️</p>
+      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved.</p>
     </footer>
   </div>
-
-  <script>
-    // ฟังก์ชันคัดลอกลิงก์
-    function copyToClipboard() {
-      const shareLink = document.getElementById('shareLink');
-      shareLink.select();
-      document.execCommand('copy');
-      alert('Link copied to clipboard!');
-    }
-    
-    // เริ่มต้นค่า scriptCount จากจำนวนสคริปต์ที่มีอยู่
-    let scriptCount = <%= mod.scripts.length %>;
-    const MAX_SCRIPTS = 3;
-    
-    function addScript() {
-      if (scriptCount >= MAX_SCRIPTS) {
-        alert('You can add a maximum of ' + MAX_SCRIPTS + ' scripts.');
-        return;
-      }
-      
-      const container = document.getElementById('scripts-container');
-      const index = scriptCount;
-      
-      const scriptItem = document.createElement('div');
-      scriptItem.className = 'script-item';
-      scriptItem.dataset.scriptIndex = index;
-      
-      scriptItem.innerHTML = `
-        <div class="script-item-header">
-          <h4 class="script-title">Script ${index + 1}</h4>
-          <div class="script-actions">
-            <button type="button" class="btn-remove" onclick="removeScript(this)">&times;</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="scriptName${index}">Script Name *</label>
-          <input type="text" id="scriptName${index}" name="scripts[${index}][name]" placeholder="Enter script name" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="scriptLink${index}">Script Download Link *</label>
-          <input type="url" id="scriptLink${index}" name="scripts[${index}][link]" placeholder="https://..." required>
-        </div>
-        
-        <div class="form-group">
-          <label for="scriptImage${index}">Script Image URL (optional)</label>
-          <input type="url" id="scriptImage${index}" name="scripts[${index}][image]" placeholder="https://...">
-        </div>
-        
-        <div class="form-group">
-          <label for="scriptDesc${index}">Script Description (optional)</label>
-          <textarea id="scriptDesc${index}" name="scripts[${index}][description]" rows="3" placeholder="Briefly describe this script"></textarea>
-        </div>
-      `;
-      
-      container.appendChild(scriptItem);
-      scriptCount++;
-      
-      // Show remove button on first script if there's more than one script
-      if (scriptCount > 1) {
-        document.querySelector('.script-item[data-script-index="0"] .btn-remove').style.display = 'block';
-      }
-      
-      // Hide add button if max scripts reached
-      if (scriptCount >= MAX_SCRIPTS) {
-        document.getElementById('add-script-btn').style.display = 'none';
-      }
-    }
-    
-    function removeScript(button) {
-      const scriptItem = button.closest('.script-item');
-      const index = parseInt(scriptItem.dataset.scriptIndex);
-      
-      scriptItem.remove();
-      scriptCount--;
-      
-      // Renumber remaining scripts
-      const scripts = document.querySelectorAll('.script-item');
-      scripts.forEach((script, i) => {
-        // Update displayed title
-        script.querySelector('.script-title').textContent = `Script ${i + 1}`;
-        
-        // Update data attribute
-        script.dataset.scriptIndex = i;
-        
-        // Update input names and IDs
-        const inputs = script.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-          const name = input.getAttribute('name');
-          const id = input.getAttribute('id');
-          
-          input.setAttribute('name', name.replace(/scripts\[\d+\]/, `scripts[${i}]`));
-          input.setAttribute('id', id.replace(/\d+$/, i));
-        });
-        
-        // Update labels
-        const labels = script.querySelectorAll('label');
-        labels.forEach(label => {
-          const forAttr = label.getAttribute('for');
-          label.setAttribute('for', forAttr.replace(/\d+$/, i));
-        });
-      });
-      
-      // Hide remove button on first script if there's only one script left
-      if (scriptCount === 1) {
-        const firstRemoveBtn = document.querySelector('.script-item .btn-remove');
-        if (firstRemoveBtn) {
-          firstRemoveBtn.style.display = 'none';
-        }
-      }
-      
-      // Show add button if we're below max
-      if (scriptCount < MAX_SCRIPTS) {
-        document.getElementById('add-script-btn').style.display = 'inline-flex';
-      }
-    }
-  </script>
 </body>
 </html>
