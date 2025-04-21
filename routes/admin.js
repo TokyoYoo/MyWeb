@@ -291,4 +291,72 @@ router.post('/settings/update-linkvertise', isAdmin, async (req, res) => {
   }
 });
 
+// แสดงหน้าแก้ไขลิงก์
+router.get('/edit-link/:id', ensureAuthenticated, async (req, res) => {
+  try {
+    const mod = await Mod.findById(req.params.id);
+    
+    if (!mod) {
+      return res.status(404).redirect('/admin/dashboard');
+    }
+    
+    // สร้าง URL สำหรับแชร์
+    const shareUrl = `${req.protocol}://${req.get('host')}/mod/${mod.shortId}`;
+    
+    res.render('admin/edit-link', {
+      title: `Edit: ${mod.name}`,
+      mod,
+      shareUrl,
+      message: req.flash('message')
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash('message', { type: 'danger', text: 'Error loading mod data' });
+    res.redirect('/admin/dashboard');
+  }
+});
+
+// บันทึกการแก้ไขลิงก์
+router.post('/edit-link/:id', ensureAuthenticated, async (req, res) => {
+  try {
+    const { name, image, scripts } = req.body;
+    
+    // แปลงข้อมูลสคริปต์จากฟอร์มให้อยู่ในรูปแบบ array
+    let scriptsArray = [];
+    
+    // ตรวจสอบว่า scripts เป็น array หรือ object เดี่ยว
+    if (Array.isArray(scripts)) {
+      scriptsArray = scripts;
+    } else if (typeof scripts === 'object') {
+      // กรณีมีสคริปต์เดียว หรือรูปแบบของข้อมูลเป็น object
+      const scriptKeys = Object.keys(scripts).sort();
+      
+      for (const key of scriptKeys) {
+        scriptsArray.push(scripts[key]);
+      }
+    }
+    
+    // ตรวจสอบและแน่ใจว่ามีอย่างน้อย 1 สคริปต์
+    if (!scriptsArray || scriptsArray.length === 0) {
+      req.flash('message', { type: 'danger', text: 'At least one script is required' });
+      return res.redirect(`/admin/edit-link/${req.params.id}`);
+    }
+    
+    // อัปเดตข้อมูลในฐานข้อมูล
+    await Mod.findByIdAndUpdate(req.params.id, {
+      name,
+      image: image || null,
+      scripts: scriptsArray,
+      updatedAt: Date.now()
+    });
+    
+    req.flash('message', { type: 'success', text: 'Link updated successfully' });
+    res.redirect(`/admin/edit-link/${req.params.id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash('message', { type: 'danger', text: 'Error updating link' });
+    res.redirect(`/admin/edit-link/${req.params.id}`);
+  }
+});
+
 module.exports = router;
