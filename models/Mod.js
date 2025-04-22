@@ -31,21 +31,9 @@ const ModSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  adConfig: {
-    checkpoint1: {
-      provider: { type: String, enum: ['none', 'linkvertise', 'workink'], default: 'linkvertise' }
-    },
-    checkpoint2: {
-      provider: { type: String, enum: ['none', 'linkvertise', 'workink'], default: 'none' }
-    },
-    checkpoint3: {
-      provider: { type: String, enum: ['none', 'linkvertise', 'workink'], default: 'none' }
-    }
   }
 });
 

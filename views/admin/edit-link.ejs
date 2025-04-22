@@ -1,14 +1,14 @@
 <!-- views/admin/edit-link.ejs -->
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> - Free Mod</title>
+  <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* สไตล์สำหรับหน้า edit-link */
+    /* styles for edit-link page */
     :root {
       --primary: #7e57c2;
       --primary-light: #b085f5;
@@ -345,7 +345,7 @@
     </header>
 
     <main class="edit-link-page">
-      <h1>แก้ไขลิงก์</h1>
+      <h1>Edit Link</h1>
       
       <% if (typeof error !== 'undefined') { %>
         <div class="alert alert-danger">
@@ -355,53 +355,53 @@
       
       <form action="/admin/edit/<%= mod._id %>?_method=PUT" method="POST" class="edit-link-form">
         <div class="form-group">
-          <label for="name">ชื่อมอด *</label>
+          <label for="name">Script Name *</label>
           <input type="text" id="name" name="name" value="<%= mod.name %>" required>
         </div>
         
         <div class="form-group">
-          <label for="originalLink">ลิงก์มอดต้นฉบับ *</label>
+          <label for="originalLink">Original Script Link *</label>
           <input type="url" id="originalLink" name="originalLink" value="<%= mod.originalLink %>" required>
         </div>
         
         <div class="form-group">
-          <label for="image">ลิงก์รูปภาพ (ไม่บังคับ)</label>
+          <label for="image">Image Link (Optional)</label>
           <input type="url" id="image" name="image" value="<%= mod.image %>">
-          <small>หากไม่ใส่ จะใช้รูปภาพเริ่มต้น</small>
+          <small>If not provided, default image will be used</small>
         </div>
         
         <div class="form-group">
           <label>Short ID</label>
           <p class="form-static-text"><%= mod.shortId %></p>
-          <small>URL ของลิงก์: <a href="/mod/<%= mod.shortId %>" target="_blank" style="color: var(--primary); text-decoration: none;">https://yourdomain.com/mod/<%= mod.shortId %></a></small>
+          <small>Link URL: <a href="/mod/<%= mod.shortId %>" target="_blank" style="color: var(--primary); text-decoration: none;">https://yourdomain.com/mod/<%= mod.shortId %></a></small>
         </div>
         
         <div class="form-group">
-          <label>สถิติ</label>
+          <label>Statistics</label>
           <div class="stats-grid">
             <div class="stat-item">
-              <span class="stat-label">คลิก:</span>
+              <span class="stat-label">Clicks:</span>
               <span class="stat-value"><%= mod.clicks %></span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">ดาวน์โหลด:</span>
+              <span class="stat-label">Downloads:</span>
               <span class="stat-value"><%= mod.completedClicks %></span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">สร้างเมื่อ:</span>
+              <span class="stat-label">Created On:</span>
               <span class="stat-value"><%= new Date(mod.createdAt).toLocaleString() %></span>
             </div>
           </div>
         </div>
         
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">บันทึกการแก้ไข</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
       </form>
     </main>
 
     <footer>
-      <p>&copy; <%= new Date().getFullYear() %> Free Mod. All rights reserved.</p>
+      <p>&copy; <%= new Date().getFullYear() %> Apologize. All rights reserved.</p>
     </footer>
   </div>
 </body>

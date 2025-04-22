@@ -1,40 +1,192 @@
-
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #7e57c2;
+      --primary-hover: #6a48b0;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e0e0e0;
+      --background-light: #f9f9f9;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --success-color: #4caf50;
+      --error-color: #f44336;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      background-color: #f5f7fa;
+    }
+    
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .dashboard-sidebar {
+      width: 250px;
+      background: linear-gradient(to bottom, #7e57c2, #5e35b1);
+      color: white;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .sidebar-nav {
+      flex-grow: 1;
+      padding: 20px 0;
+    }
+    
+    .sidebar-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar-nav li {
+      margin-bottom: 5px;
+    }
+    
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar-nav a i {
+      margin-right: 12px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-nav a:hover, .sidebar-nav li.active a {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border-left-color: white;
+    }
+    
+    .sidebar-footer {
+      padding: 15px 20px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dashboard-main {
+      flex-grow: 1;
+      margin-left: 250px;
+      padding: 20px 30px;
+    }
+    
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .header-left h1 {
+      margin: 0 0 5px 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .date-display {
+      color: var(--text-light);
+      margin: 0;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-greeting {
+      margin-right: 15px;
+      font-weight: 500;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-outline {
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
     .settings-tabs {
       display: flex;
-      border-bottom: 1px solid #dee2e6;
-      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 25px;
+      background-color: white;
+      border-radius: 8px 8px 0 0;
+      padding: 0 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
     
     .tab-item {
-      padding: 12px 20px;
+      padding: 16px 24px;
       cursor: pointer;
       border-bottom: 3px solid transparent;
       font-weight: 500;
-      color: #555;
+      color: var(--text-light);
       margin-right: 10px;
+      transition: all 0.3s;
     }
     
     .tab-item:hover {
-      color: #7e57c2;
+      color: var(--primary-color);
     }
     
     .tab-item.active {
-      color: #7e57c2;
-      border-bottom-color: #7e57c2;
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
     }
     
     .tab-content {
       display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .tab-content.active {
@@ -44,74 +196,159 @@
     .settings-card {
       background-color: white;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      padding: 25px;
-      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 25px;
     }
     
     .settings-card h3 {
       font-size: 18px;
-      margin-bottom: 20px;
-      color: #333;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
+      margin-bottom: 25px;
+      color: var(--text-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+      position: relative;
+    }
+    
+    .settings-card h3::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--primary-color);
     }
     
     .alert {
-      padding: 12px 15px;
+      padding: 15px 20px;
       border-radius: 6px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .alert::before {
+      margin-right: 15px;
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 18px;
     }
     
     .alert-success {
-      background-color: #f0f9eb;
-      border-left: 4px solid #67c23a;
-      color: #67c23a;
+      background-color: rgba(76, 175, 80, 0.1);
+      border-left: 4px solid var(--success-color);
+      color: var(--success-color);
+    }
+    
+    .alert-success::before {
+      content: '\f058';
     }
     
     .alert-danger {
-      background-color: #fff2f0;
-      border-left: 4px solid #ff4d4f;
-      color: #ff4d4f;
+      background-color: rgba(244, 67, 54, 0.1);
+      border-left: 4px solid var(--error-color);
+      color: var(--error-color);
+    }
+    
+    .alert-danger::before {
+      content: '\f057';
     }
     
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     
     .form-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: 500;
-      color: #555;
+      color: var(--text-color);
     }
     
     .form-control {
       width: 100%;
-      padding: 10px 14px;
-      border: 1px solid #ddd;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 14px;
+      transition: all 0.3s;
     }
     
     .form-control:focus {
-      border-color: #7e57c2;
-      box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.15);
       outline: none;
     }
     
+    .form-control[readonly] {
+      background-color: var(--background-light);
+      cursor: not-allowed;
+    }
+    
+    .text-muted {
+      color: var(--text-light);
+      font-size: 13px;
+      margin-top: 5px;
+      display: block;
+    }
+    
     .btn-primary {
-      background-color: #7e57c2;
+      background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
+      transition: all 0.3s;
     }
     
     .btn-primary:hover {
-      background-color: #6a48b0;
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(126, 87, 194, 0.3);
+    }
+    
+    .flex {
+      display: flex;
+    }
+    
+    .gap-4 {
+      gap: 16px;
+    }
+    
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 12px;
+      padding-right: 40px;
+    }
+    
+    @media (max-width: 992px) {
+      .dashboard-sidebar {
+        width: 70px;
+        overflow: hidden;
+      }
+      
+      .sidebar-header h2, .sidebar-footer p {
+        display: none;
+      }
+      
+      .sidebar-nav a span {
+        display: none;
+      }
+      
+      .sidebar-nav a i {
+        margin-right: 0;
+        font-size: 18px;
+      }
+      
+      .dashboard-main {
+        margin-left: 70px;
+      }
     }
   </style>
 </head>
@@ -124,10 +361,10 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> Overview</a></li>
-          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> Create a new link</a></li>
-          <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> Settings</a></li>
-          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+          <li><a href="/admin/dashboard"><i class="fas fa-chart-line"></i> <span>Overview</span></a></li>
+          <li><a href="/admin/create-link"><i class="fas fa-plus-circle"></i> <span>Create a new link</span></a></li>
+          <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+          <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
         </ul>
       </nav>
       <div class="sidebar-footer">
@@ -139,12 +376,12 @@
     <main class="dashboard-main">
       <header class="main-header">
         <div class="header-left"> 
-          <h1>Set up the system</h1>
+          <h1>System Settings</h1>
           <p class="date-display"><%= new Date().toLocaleDateString('en-EN', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) %></p>
         </div>
         <div class="header-right">
           <div class="user-menu">
-            <span class="user-greeting">Yoo, <%= user.username %></span>
+            <span class="user-greeting">Hello, <%= user.username %></span>
             <a href="/admin/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </div>
@@ -154,27 +391,27 @@
       <section class="settings-section">
         <div class="settings-tabs">
           <div class="tab-item active" data-tab="account">
-            <i class="fas fa-user-circle"></i> User account
+            <i class="fas fa-user-circle"></i> User Account
           </div>
           <div class="tab-item" data-tab="password">
-            <i class="fas fa-key"></i> Change password
+            <i class="fas fa-key"></i> Change Password
           </div>
           <div class="tab-item" data-tab="website">
-            <i class="fas fa-globe"></i> Set up website
+            <i class="fas fa-globe"></i> Website Settings
           </div>
         </div>
 
         <!-- Account Settings -->
         <div id="account" class="tab-content active">
           <div class="settings-card">
-            <h3>Account information</h3>
+            <h3>Account Information</h3>
             <div class="form-group">
-              <label>User name</label>
+              <label>Username</label>
               <input type="text" class="form-control" value="<%= user.username %>" readonly>
             </div>
             <div class="form-group">
-              <label>status</label>
-              <input type="text" class="form-control" value="<%= user.isAdmin ? 'Admin' : 'member' %>" readonly>
+              <label>Status</label>
+              <input type="text" class="form-control" value="<%= user.isAdmin ? 'Admin' : 'Member' %>" readonly>
             </div>
           </div>
         </div>
@@ -182,7 +419,7 @@
         <!-- Password Settings -->
         <div id="password" class="tab-content <%= locals.activeTab === 'password' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>Change password</h3>
+            <h3>Change Password</h3>
             
             <% if(locals.error && locals.activeTab === 'password'){ %>
               <div class="alert alert-danger"><%= error %></div>
@@ -193,18 +430,18 @@
             
             <form action="/admin/settings/change-password" method="POST">
               <div class="form-group">
-                <label for="currentPassword">Current password</label>
+                <label for="currentPassword">Current Password</label>
                 <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="newPassword">New password</label>
+                <label for="newPassword">New Password</label>
                 <input type="password" id="newPassword" name="newPassword" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="confirmPassword">Confirm new password</label>
+                <label for="confirmPassword">Confirm New Password</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
               </div>
-              <button type="submit" class="btn btn-primary">Save the new password.</button>
+              <button type="submit" class="btn btn-primary">Save New Password</button>
             </form>
           </div>
         </div>
@@ -212,7 +449,7 @@
         <!-- Website Settings -->
         <div id="website" class="tab-content <%= locals.activeTab === 'website' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>ตั้งค่าระบบโฆษณา</h3>
+            <h3>Website Configuration</h3>
             
             <% if(locals.error && locals.activeTab === 'website'){ %>
               <div class="alert alert-danger"><%= error %></div>
@@ -221,57 +458,49 @@
               <div class="alert alert-success"><%= success %></div>
             <% } %>
             
-            <form action="/admin/settings/update-ads" method="POST">
+            <form id="websiteSettingsForm" action="/admin/settings/update-website" method="POST">
               <div class="form-group">
                 <label for="linkvertiseId">Linkvertise ID</label>
-                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= settings ? settings.linkvertiseId : '572754' %>" required>
-                <small class="text-gray-400">ตัวอย่าง: 572754</small>
+                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= settings && settings.linkvertiseId ? settings.linkvertiseId : '572754' %>">
+                <small class="text-muted">The ID for your Linkvertise account</small>
               </div>
               
               <div class="form-group">
-                <label for="workinkUrl">Work.ink URL</label>
-                <input type="text" id="workinkUrl" name="workinkUrl" class="form-control" value="<%= settings ? settings.workinkUrl : 'https://work.ink/1Zga/m9rbrvua' %>" required>
-                <small class="text-gray-400">ตัวอย่าง: https://work.ink/1Zga/m9rbrvua</small>
+                <label for="workinkId">Work.ink ID</label>
+                <input type="text" id="workinkId" name="workinkId" class="form-control" value="<%= settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua' %>">
+                <small class="text-muted">The ID for your Work.ink account (e.g., 1Zga/m9rbrvua)</small>
               </div>
               
               <div class="form-group">
-                <h4 class="mb-3 mt-4">ตั้งค่าเริ่มต้นของระบบโฆษณา</h4>
-                <p class="text-gray-400 mb-3">การตั้งค่านี้จะเป็นค่าเริ่มต้นสำหรับลิงก์ใหม่ที่สร้างขึ้น</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <!-- Checkpoint 1 -->
-                  <div class="p-4 border border-gray-600 rounded-lg">
-                    <h5 class="font-medium mb-2">Checkpoint 1</h5>
-                    <select name="defaultCheckpoint1" class="form-control">
-                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint1 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
-                      <option value="workink" <%= settings && settings.defaultCheckpoint1 === 'workink' ? 'selected' : '' %>>Work.ink</option>
-                      <option value="none" <%= settings && settings.defaultCheckpoint1 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
-                    </select>
-                  </div>
-                  
-                  <!-- Checkpoint 2 -->
-                  <div class="p-4 border border-gray-600 rounded-lg">
-                    <h5 class="font-medium mb-2">Checkpoint 2</h5>
-                    <select name="defaultCheckpoint2" class="form-control">
-                      <option value="none" <%= settings && settings.defaultCheckpoint2 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
-                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint2 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
-                      <option value="workink" <%= settings && settings.defaultCheckpoint2 === 'workink' ? 'selected' : '' %>>Work.ink</option>
-                    </select>
-                  </div>
-                  
-                  <!-- Checkpoint 3 -->
-                  <div class="p-4 border border-gray-600 rounded-lg">
-                    <h5 class="font-medium mb-2">Checkpoint 3</h5>
-                    <select name="defaultCheckpoint3" class="form-control">
-                      <option value="none" <%= settings && settings.defaultCheckpoint3 === 'none' ? 'selected' : '' %>>ไม่ใช้โฆษณา</option>
-                      <option value="linkvertise" <%= settings && settings.defaultCheckpoint3 === 'linkvertise' ? 'selected' : '' %>>Linkvertise</option>
-                      <option value="workink" <%= settings && settings.defaultCheckpoint3 === 'workink' ? 'selected' : '' %>>Work.ink</option>
-                    </select>
-                  </div>
-                </div>
+                <label for="checkpoint1Api">Checkpoint 1</label>
+                <select id="checkpoint1Api" name="checkpoint1Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint1Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint1Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint1Api === 'none') ? 'selected' : '' %>>None</option>
+                </select>
               </div>
               
-              <button type="submit" class="btn btn-primary mt-4">บันทึกการตั้งค่า</button>
+              <div class="form-group">
+                <label for="checkpoint2Api">Checkpoint 2</label>
+                <select id="checkpoint2Api" name="checkpoint2Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint2Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint2Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint2Api === 'none') ? 'selected' : '' %>>None</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="checkpoint3Api">Checkpoint 3</label>
+                <select id="checkpoint3Api" name="checkpoint3Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint3Api === 'linkvertise') ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint3Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint3Api === 'none') || (!settings) ? 'selected' : '' %>>None</option>
+                </select>
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+              </div>
             </form>
           </div>
         </div>
@@ -282,26 +511,24 @@
       const tabItems = document.querySelectorAll('.tab-item');
       const tabContents = document.querySelectorAll('.tab-content');
       
-      
+      // Function to switch tabs
       function switchTab(tabId) {
-        
         tabContents.forEach(content => {
           content.classList.remove('active');
         });
-        
         
         tabItems.forEach(item => {
           item.classList.remove('active');
         });
         
-        
         document.getElementById(tabId).classList.add('active');
-        
-        
         document.querySelector(`.tab-item[data-tab="${tabId}"]`).classList.add('active');
+        
+        // Update URL with active tab
+        history.pushState(null, null, `?tab=${tabId}`);
       }
       
-      
+      // Tab click event listeners
       tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
           const tabId = tab.getAttribute('data-tab');
@@ -309,10 +536,21 @@
         });
       });
       
+      // Initialize active tab based on URL
+      function initActiveTab() {
+        const params = new URLSearchParams(window.location.search);
+        const activeTab = params.get('tab');
+        
+        if (activeTab && document.getElementById(activeTab)) {
+          switchTab(activeTab);
+        } <% if(locals.activeTab){ %>
+          else {
+            switchTab('<%= locals.activeTab %>');
+          }
+        <% } %>
+      }
       
-      <% if(locals.activeTab){ %>
-        switchTab('<%= locals.activeTab %>');
-      <% } %>
+      initActiveTab();
     });
   </script>
 </body>
