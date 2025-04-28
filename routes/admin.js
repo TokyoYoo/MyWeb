@@ -1,13 +1,12 @@
+// routes/admin.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const shortid = require('shortid');
 const Mod = require('../models/Mod');
 const User = require('../models/User');
-const WebsiteSettings = require('../models/WebsiteSettings');
 const auth = require('../middlewares/auth');
-const settingsController = require('../controllers/settingsController');
-
+const WebsiteSettings = require('../models/WebsiteSettings');
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
   if (req.session.user && req.session.user.isAdmin) {
@@ -161,9 +160,134 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// ใช้ settingsController สำหรับหน้า settings
-router.get('/settings', isAdmin, settingsController.showSettings);
-router.post('/settings/update-website', isAdmin, settingsController.updateWebsite);
-router.post('/settings/change-password', isAdmin, settingsController.changePassword);
+// เพิ่มส่วนนี้ก่อน module.exports = router; ในไฟล์ routes/admin.js
 
+// หน้าตั้งค่า
+router.get('/settings', isAdmin, (req, res) => {
+  res.render('admin/settings', { 
+    title: 'ตั้งค่าระบบ',
+    user: req.session.user
+  });
+});
+
+// เปลี่ยนรหัสผ่านจากหน้าตั้งค่า
+router.post('/settings/change-password', isAdmin, async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    
+    // ตรวจสอบว่ารหัสผ่านใหม่ตรงกัน
+    if (newPassword !== confirmPassword) {
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'รหัสผ่านใหม่ไม่ตรงกัน',
+        activeTab: 'password'
+      });
+    }
+    
+    // หาผู้ใช้จาก ID ในเซสชัน
+    const user = await User.findById(req.session.user.id);
+    if (!user) {
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'ไม่พบผู้ใช้',
+        activeTab: 'password'
+      });
+    }
+    
+    // ตรวจสอบรหัสผ่านปัจจุบัน
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.render('admin/settings', {
+        title: 'ตั้งค่าระบบ',
+        user: req.session.user,
+        error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+        activeTab: 'password'
+      });
+    }
+    
+    // เข้ารหัสและบันทึกรหัสผ่านใหม่
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    
+    return res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      success: 'เปลี่ยนรหัสผ่านสำเร็จ',
+      activeTab: 'password'
+    });
+  } catch (err) {
+    console.error(err);
+    res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      error: 'เกิดข้อผิดพลาดในเซิร์ฟเวอร์',
+      activeTab: 'password'
+    });
+  }
+});
+router.post('/settings/update-website', isAdmin, async (req, res) => {
+  try {
+    const { linkvertiseId, workinkId, checkpoint1Api, checkpoint2Api, checkpoint3Api } = req.body;
+    
+    // หาหรือสร้างการตั้งค่า
+    let settings = await WebsiteSettings.findOne();
+    
+    if (!settings) {
+      settings = new WebsiteSettings({
+        linkvertiseId,
+        workinkId,
+        checkpoint1Api,
+        checkpoint2Api,
+        checkpoint3Api
+      });
+    } else {
+      settings.linkvertiseId = linkvertiseId;
+      settings.workinkId = workinkId;
+      settings.checkpoint1Api = checkpoint1Api;
+      settings.checkpoint2Api = checkpoint2Api;
+      settings.checkpoint3Api = checkpoint3Api;
+    }
+    
+    await settings.save();
+    
+    return res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      settings,
+      success: 'บันทึกการตั้งค่าเรียบร้อยแล้ว',
+      activeTab: 'website'
+    });
+  } catch (err) {
+    console.error(err);
+    res.render('admin/settings', {
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      error: 'เกิดข้อผิดพลาดในเซิร์ฟเวอร์',
+      activeTab: 'website'
+    });
+  }
+});
+
+// แก้ไขเส้นทาง settings เพื่อดึงข้อมูลการตั้งค่า
+router.get('/settings', isAdmin, async (req, res) => {
+  try {
+    const settings = await WebsiteSettings.findOne();
+    
+    res.render('admin/settings', { 
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      settings
+    });
+  } catch (err) {
+    console.error(err);
+    res.render('admin/settings', { 
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      error: 'เกิดข้อผิดพลาดในการดึงข้อมูลการตั้งค่า'
+    });
+  }
+});
 module.exports = router;

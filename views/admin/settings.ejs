@@ -6,8 +6,6 @@
   <title><%= title %> - Apologize</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-  <!-- Lootlab Script -->
-  <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1174439"></script>
   <style>
     :root {
       --primary-color: #7e57c2;
@@ -329,32 +327,6 @@
       padding-right: 40px;
     }
     
-    .checkpoint-config {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-      background-color: var(--background-light);
-    }
-    
-    .checkpoint-title {
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: var(--primary-color);
-      display: flex;
-      align-items: center;
-    }
-    
-    .checkpoint-title i {
-      margin-right: 10px;
-    }
-    
-    .provider-specific-settings {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px dashed var(--border-color);
-    }
-    
     @media (max-width: 992px) {
       .dashboard-sidebar {
         width: 70px;
@@ -477,216 +449,54 @@
         <!-- Website Settings -->
         <div id="website" class="tab-content <%= locals.activeTab === 'website' ? 'active' : '' %>">
           <div class="settings-card">
-            <small class="text-muted">Leave empty to use default ID</small>
-            */
-            // to:
-            /*
-              <small class="text-muted">Your Linkvertise account ID</small>
-              
-              <h3>Checkpoint Configurations</h3>
-              
-              <!-- Checkpoint 1 Configuration -->
-              <div class="checkpoint-config">
-                <div class="checkpoint-title">
-                  <i class="fas fa-flag-checkered"></i> Checkpoint 1
-                </div>
-                
-                <div class="form-group">
-                  <label for="checkpoint1Provider">Provider</label>
-                  <select id="checkpoint1Provider" name="checkpoint1[provider]" class="form-control checkpoint-provider-select" data-checkpoint="1">
-                    <option value="linkvertise" 
-                            <%= (settings && settings.checkpoint1 && settings.checkpoint1.provider === 'linkvertise') || 
-                                (settings && settings.checkpoint1Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>
-                      Linkvertise
-                    </option>
-                    <option value="workink" 
-                            <%= (settings && settings.checkpoint1 && settings.checkpoint1.provider === 'workink') || 
-                                (settings && settings.checkpoint1Api === 'workink') ? 'selected' : '' %>>
-                      Work.ink
-                    </option>
-                    <option value="lootlab" 
-                            <%= (settings && settings.checkpoint1 && settings.checkpoint1.provider === 'lootlab') || 
-                                (settings && settings.checkpoint1Api === 'lootlab') ? 'selected' : '' %>>
-                      Lootlab
-                    </option>
-                    <option value="none" 
-                            <%= (settings && settings.checkpoint1 && settings.checkpoint1.provider === 'none') || 
-                                (settings && settings.checkpoint1Api === 'none') ? 'selected' : '' %>>
-                      None
-                    </option>
-                  </select>
-                </div>
-                
-                <div class="provider-specific-settings" id="checkpoint1Settings">
-                  <!-- Linkvertise Settings for Checkpoint 1 -->
-                  <div class="form-group checkpoint1-provider-setting" data-provider="linkvertise">
-                    <label for="checkpoint1LinkvertiseId">Linkvertise ID for Checkpoint 1</label>
-                    <input type="text" id="checkpoint1LinkvertiseId" name="checkpoint1[linkvertiseId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint1 && settings.checkpoint1.linkvertiseId ? 
-                                  settings.checkpoint1.linkvertiseId : 
-                                  (settings && settings.linkvertiseId ? settings.linkvertiseId : '572754') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Work.ink Settings for Checkpoint 1 -->
-                  <div class="form-group checkpoint1-provider-setting" data-provider="workink" style="display: none;">
-                    <label for="checkpoint1WorkinkId">Work.ink ID for Checkpoint 1</label>
-                    <input type="text" id="checkpoint1WorkinkId" name="checkpoint1[workinkId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint1 && settings.checkpoint1.workinkId ? 
-                                  settings.checkpoint1.workinkId : 
-                                  (settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Lootlab Settings for Checkpoint 1 -->
-                  <div class="form-group checkpoint1-provider-setting" data-provider="lootlab" style="display: none;">
-                    <label for="checkpoint1LootlabId">Lootlab ID for Checkpoint 1</label>
-                    <input type="text" id="checkpoint1LootlabId" name="checkpoint1[lootlabId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint1 && settings.checkpoint1.lootlabId ? 
-                                  settings.checkpoint1.lootlabId : 
-                                  (settings && settings.lootlabId ? settings.lootlabId : '1174439') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                </div>
+            <h3>Website Configuration</h3>
+            
+            <% if(locals.error && locals.activeTab === 'website'){ %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            <% if(locals.success && locals.activeTab === 'website'){ %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+            
+            <form id="websiteSettingsForm" action="/admin/settings/update-website" method="POST">
+              <div class="form-group">
+                <label for="linkvertiseId">Linkvertise ID</label>
+                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= settings && settings.linkvertiseId ? settings.linkvertiseId : '572754' %>">
+                <small class="text-muted">The ID for your Linkvertise account</small>
               </div>
               
-              <!-- Checkpoint 2 Configuration -->
-              <div class="checkpoint-config">
-                <div class="checkpoint-title">
-                  <i class="fas fa-flag-checkered"></i> Checkpoint 2
-                </div>
-                
-                <div class="form-group">
-                  <label for="checkpoint2Provider">Provider</label>
-                  <select id="checkpoint2Provider" name="checkpoint2[provider]" class="form-control checkpoint-provider-select" data-checkpoint="2">
-                    <option value="linkvertise" 
-                            <%= (settings && settings.checkpoint2 && settings.checkpoint2.provider === 'linkvertise') || 
-                                (settings && settings.checkpoint2Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>
-                      Linkvertise
-                    </option>
-                    <option value="workink" 
-                            <%= (settings && settings.checkpoint2 && settings.checkpoint2.provider === 'workink') || 
-                                (settings && settings.checkpoint2Api === 'workink') ? 'selected' : '' %>>
-                      Work.ink
-                    </option>
-                    <option value="lootlab" 
-                            <%= (settings && settings.checkpoint2 && settings.checkpoint2.provider === 'lootlab') || 
-                                (settings && settings.checkpoint2Api === 'lootlab') ? 'selected' : '' %>>
-                      Lootlab
-                    </option>
-                    <option value="none" 
-                            <%= (settings && settings.checkpoint2 && settings.checkpoint2.provider === 'none') || 
-                                (settings && settings.checkpoint2Api === 'none') ? 'selected' : '' %>>
-                      None
-                    </option>
-                  </select>
-                </div>
-                
-                <div class="provider-specific-settings" id="checkpoint2Settings">
-                  <!-- Linkvertise Settings for Checkpoint 2 -->
-                  <div class="form-group checkpoint2-provider-setting" data-provider="linkvertise">
-                    <label for="checkpoint2LinkvertiseId">Linkvertise ID for Checkpoint 2</label>
-                    <input type="text" id="checkpoint2LinkvertiseId" name="checkpoint2[linkvertiseId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint2 && settings.checkpoint2.linkvertiseId ? 
-                                  settings.checkpoint2.linkvertiseId : 
-                                  (settings && settings.linkvertiseId ? settings.linkvertiseId : '572754') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Work.ink Settings for Checkpoint 2 -->
-                  <div class="form-group checkpoint2-provider-setting" data-provider="workink" style="display: none;">
-                    <label for="checkpoint2WorkinkId">Work.ink ID for Checkpoint 2</label>
-                    <input type="text" id="checkpoint2WorkinkId" name="checkpoint2[workinkId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint2 && settings.checkpoint2.workinkId ? 
-                                  settings.checkpoint2.workinkId : 
-                                  (settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Lootlab Settings for Checkpoint 2 -->
-                  <div class="form-group checkpoint2-provider-setting" data-provider="lootlab" style="display: none;">
-                    <label for="checkpoint2LootlabId">Lootlab ID for Checkpoint 2</label>
-                    <input type="text" id="checkpoint2LootlabId" name="checkpoint2[lootlabId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint2 && settings.checkpoint2.lootlabId ? 
-                                  settings.checkpoint2.lootlabId : 
-                                  (settings && settings.lootlabId ? settings.lootlabId : '1174439') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                </div>
+              <div class="form-group">
+                <label for="workinkId">Work.ink ID</label>
+                <input type="text" id="workinkId" name="workinkId" class="form-control" value="<%= settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua' %>">
+                <small class="text-muted">The ID for your Work.ink account (e.g., 1Zga/m9rbrvua)</small>
               </div>
               
-              <!-- Checkpoint 3 Configuration -->
-              <div class="checkpoint-config">
-                <div class="checkpoint-title">
-                  <i class="fas fa-flag-checkered"></i> Checkpoint 3
-                </div>
-                
-                <div class="form-group">
-                  <label for="checkpoint3Provider">Provider</label>
-                  <select id="checkpoint3Provider" name="checkpoint3[provider]" class="form-control checkpoint-provider-select" data-checkpoint="3">
-                    <option value="linkvertise" 
-                            <%= (settings && settings.checkpoint3 && settings.checkpoint3.provider === 'linkvertise') || 
-                                (settings && settings.checkpoint3Api === 'linkvertise') ? 'selected' : '' %>>
-                      Linkvertise
-                    </option>
-                    <option value="workink" 
-                            <%= (settings && settings.checkpoint3 && settings.checkpoint3.provider === 'workink') || 
-                                (settings && settings.checkpoint3Api === 'workink') ? 'selected' : '' %>>
-                      Work.ink
-                    </option>
-                    <option value="lootlab" 
-                            <%= (settings && settings.checkpoint3 && settings.checkpoint3.provider === 'lootlab') || 
-                                (settings && settings.checkpoint3Api === 'lootlab') ? 'selected' : '' %>>
-                      Lootlab
-                    </option>
-                    <option value="none" 
-                            <%= (settings && settings.checkpoint3 && settings.checkpoint3.provider === 'none') || 
-                                (settings && settings.checkpoint3Api === 'none') || (!settings) ? 'selected' : '' %>>
-                      None
-                    </option>
-                  </select>
-                </div>
-                
-                <div class="provider-specific-settings" id="checkpoint3Settings">
-                  <!-- Linkvertise Settings for Checkpoint 3 -->
-                  <div class="form-group checkpoint3-provider-setting" data-provider="linkvertise">
-                    <label for="checkpoint3LinkvertiseId">Linkvertise ID for Checkpoint 3</label>
-                    <input type="text" id="checkpoint3LinkvertiseId" name="checkpoint3[linkvertiseId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint3 && settings.checkpoint3.linkvertiseId ? 
-                                  settings.checkpoint3.linkvertiseId : 
-                                  (settings && settings.linkvertiseId ? settings.linkvertiseId : '572754') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Work.ink Settings for Checkpoint 3 -->
-                  <div class="form-group checkpoint3-provider-setting" data-provider="workink" style="display: none;">
-                    <label for="checkpoint3WorkinkId">Work.ink ID for Checkpoint 3</label>
-                    <input type="text" id="checkpoint3WorkinkId" name="checkpoint3[workinkId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint3 && settings.checkpoint3.workinkId ? 
-                                  settings.checkpoint3.workinkId : 
-                                  (settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                  
-                  <!-- Lootlab Settings for Checkpoint 3 -->
-                  <div class="form-group checkpoint3-provider-setting" data-provider="lootlab" style="display: none;">
-                    <label for="checkpoint3LootlabId">Lootlab ID for Checkpoint 3</label>
-                    <input type="text" id="checkpoint3LootlabId" name="checkpoint3[lootlabId]" class="form-control" 
-                           value="<%= settings && settings.checkpoint3 && settings.checkpoint3.lootlabId ? 
-                                  settings.checkpoint3.lootlabId : 
-                                  (settings && settings.lootlabId ? settings.lootlabId : '1174439') %>">
-                    <small class="text-muted">Leave empty to use default ID</small>
-                  </div>
-                </div>
+              <div class="form-group">
+                <label for="checkpoint1Api">Checkpoint 1</label>
+                <select id="checkpoint1Api" name="checkpoint1Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint1Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint1Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint1Api === 'none') ? 'selected' : '' %>>None</option>
+                </select>
               </div>
               
-              <!-- For backward compatibility -->
-              <input type="hidden" name="checkpoint1Api" id="checkpoint1Api" 
-                     value="<%= settings && settings.checkpoint1Api ? settings.checkpoint1Api : 'linkvertise' %>">
-              <input type="hidden" name="checkpoint2Api" id="checkpoint2Api" 
-                     value="<%= settings && settings.checkpoint2Api ? settings.checkpoint2Api : 'linkvertise' %>">
-              <input type="hidden" name="checkpoint3Api" id="checkpoint3Api" 
-                     value="<%= settings && settings.checkpoint3Api ? settings.checkpoint3Api : 'none' %>">
+              <div class="form-group">
+                <label for="checkpoint2Api">Checkpoint 2</label>
+                <select id="checkpoint2Api" name="checkpoint2Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint2Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint2Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint2Api === 'none') ? 'selected' : '' %>>None</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="checkpoint3Api">Checkpoint 3</label>
+                <select id="checkpoint3Api" name="checkpoint3Api" class="form-control">
+                  <option value="linkvertise" <%= (settings && settings.checkpoint3Api === 'linkvertise') ? 'selected' : '' %>>Linkvertise</option>
+                  <option value="workink" <%= (settings && settings.checkpoint3Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                  <option value="none" <%= (settings && settings.checkpoint3Api === 'none') || (!settings) ? 'selected' : '' %>>None</option>
+                </select>
+              </div>
               
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save Settings</button>
@@ -694,14 +504,10 @@
             </form>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
 
-  <!-- JavaScript for tabs and form functionality -->
+  <!-- JavaScript for tabs -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Tab switching functionality
       const tabItems = document.querySelectorAll('.tab-item');
       const tabContents = document.querySelectorAll('.tab-content');
       
@@ -730,7 +536,7 @@
         });
       });
       
-      // Initialize active tab based on URL or server-set activeTab
+      // Initialize active tab based on URL
       function initActiveTab() {
         const params = new URLSearchParams(window.location.search);
         const activeTab = params.get('tab');
@@ -745,68 +551,6 @@
       }
       
       initActiveTab();
-      
-      // Checkpoint provider selection functionality
-      const providerSelects = document.querySelectorAll('.checkpoint-provider-select');
-      
-      // Initialize provider settings visibility
-      function initProviderSettings() {
-        providerSelects.forEach(select => {
-          const checkpoint = select.getAttribute('data-checkpoint');
-          const provider = select.value;
-          
-          // Update hidden compatibility fields
-          document.getElementById(`checkpoint${checkpoint}Api`).value = provider;
-          
-          // Show/hide provider-specific settings
-          document.querySelectorAll(`.checkpoint${checkpoint}-provider-setting`).forEach(setting => {
-            if (setting.getAttribute('data-provider') === provider && provider !== 'none') {
-              setting.style.display = 'block';
-            } else {
-              setting.style.display = 'none';
-            }
-          });
-          
-          // Show/hide the entire provider-specific settings container
-          const settingsContainer = document.getElementById(`checkpoint${checkpoint}Settings`);
-          if (provider === 'none') {
-            settingsContainer.style.display = 'none';
-          } else {
-            settingsContainer.style.display = 'block';
-          }
-        });
-      }
-      
-      // Handle provider selection changes
-      providerSelects.forEach(select => {
-        select.addEventListener('change', function() {
-          const checkpoint = this.getAttribute('data-checkpoint');
-          const provider = this.value;
-          
-          // Update hidden compatibility field
-          document.getElementById(`checkpoint${checkpoint}Api`).value = provider;
-          
-          // Show/hide provider-specific settings
-          document.querySelectorAll(`.checkpoint${checkpoint}-provider-setting`).forEach(setting => {
-            if (setting.getAttribute('data-provider') === provider && provider !== 'none') {
-              setting.style.display = 'block';
-            } else {
-              setting.style.display = 'none';
-            }
-          });
-          
-          // Show/hide the entire provider-specific settings container
-          const settingsContainer = document.getElementById(`checkpoint${checkpoint}Settings`);
-          if (provider === 'none') {
-            settingsContainer.style.display = 'none';
-          } else {
-            settingsContainer.style.display = 'block';
-          }
-        });
-      });
-      
-      // Initialize provider settings visibility on page load
-      initProviderSettings();
     });
   </script>
 </body>

@@ -18,9 +18,7 @@
   <% if (apiType === 'linkvertise') { %>
     <!-- Linkvertise API -->
     <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-    <script>
-      linkvertise(<%= linkvertiseId %>, {whitelist: [], blacklist: [""]});
-    </script>
+    <script>linkvertise(<%= linkvertiseId %>, {whitelist: [], blacklist: [""]});</script>
   <% } else if (apiType === 'workink') { %>
     <!-- Work.ink API -->
     <script>
@@ -37,13 +35,9 @@
         });
       })();
     </script>
-  <% } else if (apiType === 'lootlab') { %>
-    <!-- Lootlab API -->
-    <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=<%= lootlabId %>"></script>
   <% } %>
-
   <link rel="stylesheet" href="/css/main.css">
-
+  
 </head>
 
 <body class="text-white">
