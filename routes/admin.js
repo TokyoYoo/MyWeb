@@ -1,12 +1,13 @@
-// routes/admin.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const shortid = require('shortid');
 const Mod = require('../models/Mod');
 const User = require('../models/User');
-const auth = require('../middlewares/auth');
 const WebsiteSettings = require('../models/WebsiteSettings');
+const auth = require('../middlewares/auth');
+const settingsController = require('../controllers/settingsController');
+
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
   if (req.session.user && req.session.user.isAdmin) {
@@ -160,14 +161,24 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// เพิ่มส่วนนี้ก่อน module.exports = router; ในไฟล์ routes/admin.js
-
-// หน้าตั้งค่า
-router.get('/settings', isAdmin, (req, res) => {
-  res.render('admin/settings', { 
-    title: 'ตั้งค่าระบบ',
-    user: req.session.user
-  });
+// เพิ่มการดึงข้อมูลการตั้งค่าสำหรับหน้า settings
+router.get('/settings', isAdmin, async (req, res) => {
+  try {
+    const settings = await WebsiteSettings.findOne();
+    
+    res.render('admin/settings', { 
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      settings
+    });
+  } catch (err) {
+    console.error(err);
+    res.render('admin/settings', { 
+      title: 'ตั้งค่าระบบ',
+      user: req.session.user,
+      error: 'เกิดข้อผิดพลาดในการดึงข้อมูลการตั้งค่า'
+    });
+  }
 });
 
 // เปลี่ยนรหัสผ่านจากหน้าตั้งค่า
@@ -228,6 +239,8 @@ router.post('/settings/change-password', isAdmin, async (req, res) => {
     });
   }
 });
+
+// อัปเดตการตั้งค่าเว็บไซต์
 router.post('/settings/update-website', isAdmin, async (req, res) => {
   try {
     const { linkvertiseId, workinkId, checkpoint1Api, checkpoint2Api, checkpoint3Api } = req.body;
@@ -271,23 +284,9 @@ router.post('/settings/update-website', isAdmin, async (req, res) => {
   }
 });
 
-// แก้ไขเส้นทาง settings เพื่อดึงข้อมูลการตั้งค่า
-router.get('/settings', isAdmin, async (req, res) => {
-  try {
-    const settings = await WebsiteSettings.findOne();
-    
-    res.render('admin/settings', { 
-      title: 'ตั้งค่าระบบ',
-      user: req.session.user,
-      settings
-    });
-  } catch (err) {
-    console.error(err);
-    res.render('admin/settings', { 
-      title: 'ตั้งค่าระบบ',
-      user: req.session.user,
-      error: 'เกิดข้อผิดพลาดในการดึงข้อมูลการตั้งค่า'
-    });
-  }
-});
+// ลบบรรทัดด้านล่างเนื่องจากใช้ isAdmin ที่กำหนดขึ้นในไฟล์นี้แล้ว
+// router.get('/settings', isAuthenticated, isAdmin, settingsController.showSettings);
+// router.post('/settings/update-website', isAuthenticated, isAdmin, settingsController.updateWebsite);
+// router.post('/settings/change-password', isAuthenticated, settingsController.changePassword);
+
 module.exports = router;
