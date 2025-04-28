@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const WebsiteSettingsSchema = new mongoose.Schema({
-  // Provider IDs
+  // Default provider IDs (จะไม่ใช้หน้าฟอร์มแล้ว แต่ยังเก็บไว้เพื่อความเข้ากันได้กับโค้ดเก่า)
   linkvertiseId: {
     type: String,
     default: '572754'
@@ -25,15 +25,15 @@ const WebsiteSettingsSchema = new mongoose.Schema({
     },
     linkvertiseId: {
       type: String,
-      default: ''
+      default: '572754'
     },
     workinkId: {
       type: String,
-      default: ''
+      default: '1Zh1/m9skr9gt'
     },
     lootlabId: {
       type: String,
-      default: ''
+      default: '1174439'
     }
   },
   
@@ -45,15 +45,15 @@ const WebsiteSettingsSchema = new mongoose.Schema({
     },
     linkvertiseId: {
       type: String,
-      default: ''
+      default: '572754'
     },
     workinkId: {
       type: String,
-      default: ''
+      default: '1Zh1/m9skr9gt'
     },
     lootlabId: {
       type: String,
-      default: ''
+      default: '1174439'
     }
   },
   
@@ -65,15 +65,15 @@ const WebsiteSettingsSchema = new mongoose.Schema({
     },
     linkvertiseId: {
       type: String,
-      default: ''
+      default: '572754'
     },
     workinkId: {
       type: String,
-      default: ''
+      default: '1Zh1/m9skr9gt'
     },
     lootlabId: {
       type: String,
-      default: ''
+      default: '1174439'
     }
   },
   

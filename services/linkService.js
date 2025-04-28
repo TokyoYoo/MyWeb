@@ -22,24 +22,19 @@ exports.getRedirectLink = async (checkpoint, destinationUrl) => {
     switch (checkpoint) {
       case 1:
         checkpointConfig = settings.checkpoint1;
-        providerType = settings.checkpoint1Api;
         break;
       case 2:
         checkpointConfig = settings.checkpoint2;
-        providerType = settings.checkpoint2Api;
         break;
       case 3:
         checkpointConfig = settings.checkpoint3;
-        providerType = settings.checkpoint3Api;
         break;
       default:
         throw new Error('Invalid checkpoint number');
     }
 
-    // If using the new schema structure
-    if (checkpointConfig && checkpointConfig.provider) {
-      providerType = checkpointConfig.provider;
-    }
+    // Get provider type
+    providerType = checkpointConfig.provider;
 
     // Return direct link if provider is set to 'none'
     if (providerType === 'none') {
@@ -52,30 +47,24 @@ exports.getRedirectLink = async (checkpoint, destinationUrl) => {
 
     switch (providerType) {
       case 'linkvertise':
-        // Get Linkvertise ID (checkpoint specific or default)
-        providerId = checkpointConfig && checkpointConfig.linkvertiseId && checkpointConfig.linkvertiseId.trim() !== '' 
-          ? checkpointConfig.linkvertiseId 
-          : settings.linkvertiseId;
+        // Get Linkvertise ID for this checkpoint
+        providerId = checkpointConfig.linkvertiseId || settings.linkvertiseId;
           
         // Build Linkvertise URL
         redirectUrl = `https://linkvertise.com/${providerId}/checkpoint-${checkpoint}?o=1&r=${encodeURIComponent(destinationUrl)}`;
         break;
         
       case 'workink':
-        // Get Work.ink ID (checkpoint specific or default)
-        providerId = checkpointConfig && checkpointConfig.workinkId && checkpointConfig.workinkId.trim() !== '' 
-          ? checkpointConfig.workinkId 
-          : settings.workinkId;
+        // Get Work.ink ID for this checkpoint
+        providerId = checkpointConfig.workinkId || settings.workinkId;
           
         // Build Work.ink URL
         redirectUrl = `https://work.ink/${providerId}/checkpoint-${checkpoint}?url=${encodeURIComponent(destinationUrl)}`;
         break;
         
       case 'lootlab':
-        // Get Lootlab ID (checkpoint specific or default)
-        providerId = checkpointConfig && checkpointConfig.lootlabId && checkpointConfig.lootlabId.trim() !== '' 
-          ? checkpointConfig.lootlabId 
-          : settings.lootlabId;
+        // Get Lootlab ID for this checkpoint
+        providerId = checkpointConfig.lootlabId || settings.lootlabId;
           
         // Build Lootlab URL
         redirectUrl = `https://lootlab.io/redirect/${providerId}/checkpoint-${checkpoint}?url=${encodeURIComponent(destinationUrl)}`;

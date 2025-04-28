@@ -11,7 +11,7 @@ exports.showSettings = async (req, res) => {
     
     res.render('admin/settings', {
       title: 'Settings',
-      user: req.user,
+      user: req.user || req.session.user, // รองรับทั้ง req.user และ req.session.user
       settings: settings,
       activeTab: req.query.tab || 'account'
     });
@@ -27,36 +27,16 @@ exports.showSettings = async (req, res) => {
 // Update website settings
 exports.updateWebsite = async (req, res) => {
   try {
-    // Extract form data
-    const { 
-      linkvertiseId, 
-      workinkId, 
-      lootlabId,
-      checkpoint1, 
-      checkpoint2, 
-      checkpoint3,
-      checkpoint1Api,
-      checkpoint2Api, 
-      checkpoint3Api
-    } = req.body;
-
     // Find existing settings or create new
     let settings = await WebsiteSettings.findOne({});
     if (!settings) {
       settings = new WebsiteSettings();
     }
-
-    // Update global provider IDs
-    settings.linkvertiseId = linkvertiseId;
-    settings.workinkId = workinkId;
-    settings.lootlabId = lootlabId;
-    
-    // Update checkpoint providers (for backward compatibility)
-    settings.checkpoint1Api = checkpoint1Api;
-    settings.checkpoint2Api = checkpoint2Api;
-    settings.checkpoint3Api = checkpoint3Api;
     
     // Update checkpoint configurations
+    const { checkpoint1, checkpoint2, checkpoint3 } = req.body;
+    
+    // Update checkpoint1 configuration
     if (checkpoint1) {
       settings.checkpoint1 = {
         provider: checkpoint1.provider || 'linkvertise',
@@ -64,8 +44,11 @@ exports.updateWebsite = async (req, res) => {
         workinkId: checkpoint1.workinkId || '',
         lootlabId: checkpoint1.lootlabId || ''
       };
+      // Update for backward compatibility
+      settings.checkpoint1Api = checkpoint1.provider || 'linkvertise';
     }
 
+    // Update checkpoint2 configuration
     if (checkpoint2) {
       settings.checkpoint2 = {
         provider: checkpoint2.provider || 'linkvertise',
@@ -73,8 +56,11 @@ exports.updateWebsite = async (req, res) => {
         workinkId: checkpoint2.workinkId || '',
         lootlabId: checkpoint2.lootlabId || ''
       };
+      // Update for backward compatibility
+      settings.checkpoint2Api = checkpoint2.provider || 'linkvertise';
     }
 
+    // Update checkpoint3 configuration
     if (checkpoint3) {
       settings.checkpoint3 = {
         provider: checkpoint3.provider || 'none',
@@ -82,6 +68,8 @@ exports.updateWebsite = async (req, res) => {
         workinkId: checkpoint3.workinkId || '',
         lootlabId: checkpoint3.lootlabId || ''
       };
+      // Update for backward compatibility
+      settings.checkpoint3Api = checkpoint3.provider || 'none';
     }
 
     // Save updated settings
@@ -89,7 +77,7 @@ exports.updateWebsite = async (req, res) => {
 
     res.render('admin/settings', {
       title: 'Settings',
-      user: req.user,
+      user: req.user || req.session.user,
       settings: settings,
       success: 'Website settings updated successfully.',
       activeTab: 'website'
@@ -101,7 +89,7 @@ exports.updateWebsite = async (req, res) => {
     
     res.render('admin/settings', {
       title: 'Settings',
-      user: req.user,
+      user: req.user || req.session.user,
       settings: settings,
       error: 'Error updating website settings.',
       activeTab: 'website'
@@ -113,14 +101,14 @@ exports.updateWebsite = async (req, res) => {
 exports.changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
-    const userId = req.user._id;
+    const userId = req.user?._id || req.session.user.id;
 
     // Check if passwords match
     if (newPassword !== confirmPassword) {
       const settings = await WebsiteSettings.findOne({});
       return res.render('admin/settings', {
         title: 'Settings',
-        user: req.user,
+        user: req.user || req.session.user,
         settings: settings,
         error: 'New passwords do not match.',
         activeTab: 'password'
@@ -130,13 +118,24 @@ exports.changePassword = async (req, res) => {
     // Get user from database
     const user = await User.findById(userId);
     
+    if (!user) {
+      const settings = await WebsiteSettings.findOne({});
+      return res.render('admin/settings', {
+        title: 'Settings',
+        user: req.user || req.session.user,
+        settings: settings,
+        error: 'User not found.',
+        activeTab: 'password'
+      });
+    }
+    
     // Verify current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       const settings = await WebsiteSettings.findOne({});
       return res.render('admin/settings', {
         title: 'Settings',
-        user: req.user,
+        user: req.user || req.session.user,
         settings: settings,
         error: 'Current password is incorrect.',
         activeTab: 'password'
@@ -156,7 +155,7 @@ exports.changePassword = async (req, res) => {
     
     res.render('admin/settings', {
       title: 'Settings',
-      user: req.user,
+      user: req.user || req.session.user,
       settings: settings,
       success: 'Password changed successfully.',
       activeTab: 'password'
@@ -168,7 +167,7 @@ exports.changePassword = async (req, res) => {
     
     res.render('admin/settings', {
       title: 'Settings',
-      user: req.user,
+      user: req.user || req.session.user,
       settings: settings,
       error: 'Error changing password.',
       activeTab: 'password'
