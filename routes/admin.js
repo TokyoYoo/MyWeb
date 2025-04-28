@@ -6,7 +6,7 @@ const shortid = require('shortid');
 const Mod = require('../models/Mod');
 const User = require('../models/User');
 const auth = require('../middlewares/auth');
-const WebsiteSettings = require('../models/WebsiteSettings');
+const WebsiteSettings = require('../models/AdvancedWebsiteSettings');
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
   if (req.session.user && req.session.user.isAdmin) {
@@ -162,13 +162,6 @@ router.get('/logout', (req, res) => {
 
 // เพิ่มส่วนนี้ก่อน module.exports = router; ในไฟล์ routes/admin.js
 
-// หน้าตั้งค่า
-router.get('/settings', isAdmin, (req, res) => {
-  res.render('admin/settings', { 
-    title: 'ตั้งค่าระบบ',
-    user: req.session.user
-  });
-});
 
 // เปลี่ยนรหัสผ่านจากหน้าตั้งค่า
 router.post('/settings/change-password', isAdmin, async (req, res) => {
@@ -274,12 +267,12 @@ router.post('/settings/update-website', isAdmin, async (req, res) => {
 // แก้ไขเส้นทาง settings เพื่อดึงข้อมูลการตั้งค่า
 router.get('/settings', isAdmin, async (req, res) => {
   try {
-    const settings = await WebsiteSettings.findOne();
+    const advancedSettings = await AdvancedWebsiteSettings.findOne();
     
     res.render('admin/settings', { 
       title: 'ตั้งค่าระบบ',
       user: req.session.user,
-      settings
+      settings: advancedSettings
     });
   } catch (err) {
     console.error(err);

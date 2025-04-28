@@ -2,13 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const Mod = require('../models/Mod');
-const WebsiteSettings = require('../models/WebsiteSettings');
+const AdvancedWebsiteSettings = require('../models/AdvancedWebsiteSettings');
 
 // Display mod page with checkpoint 1
 router.get('/:shortId', async (req, res) => {
   try {
     const mod = await Mod.findOne({ shortId: req.params.shortId });
-    const settings = await WebsiteSettings.findOne();
+    const settings = await AdvancedWebsiteSettings.findOne();
     
     if (!mod) {
       return res.status(404).render('404', { title: 'Mod Not Found' });
@@ -23,8 +23,8 @@ router.get('/:shortId', async (req, res) => {
       checkpoint: 1,
       nextUrl: `/mod/${mod.shortId}/checkpoint/2`,
       apiType: settings ? settings.checkpoint1Api : 'linkvertise',
-      linkvertiseId: settings ? settings.linkvertiseId : '572754',
-      workinkId: settings ? settings.workinkId : '1Zga/m9rbrvua'
+      linkvertiseId: settings ? settings.linkvertiseId1 : '572754',
+      workinkId: settings ? settings.workinkId1 : '1Zh1/m9skr9gt'
     });
   } catch (err) {
     console.error(err);
@@ -36,7 +36,7 @@ router.get('/:shortId', async (req, res) => {
 router.get('/:shortId/checkpoint/2', async (req, res) => {
   try {
     const mod = await Mod.findOne({ shortId: req.params.shortId });
-    const settings = await WebsiteSettings.findOne();
+    const settings = await AdvancedWebsiteSettings.findOne();
     
     if (!mod) {
       return res.status(404).render('404', { title: 'Mod Not Found' });
@@ -48,8 +48,8 @@ router.get('/:shortId/checkpoint/2', async (req, res) => {
       checkpoint: 2,
       nextUrl: `/mod/${mod.shortId}/checkpoint/3`,
       apiType: settings ? settings.checkpoint2Api : 'linkvertise',
-      linkvertiseId: settings ? settings.linkvertiseId : '572754',
-      workinkId: settings ? settings.workinkId : '1Zga/m9rbrvua'
+      linkvertiseId: settings ? settings.linkvertiseId2 : '572754',
+      workinkId: settings ? settings.workinkId2 : '1Zh1/m9skr9gt'
     });
   } catch (err) {
     console.error(err);
@@ -61,7 +61,7 @@ router.get('/:shortId/checkpoint/2', async (req, res) => {
 router.get('/:shortId/checkpoint/3', async (req, res) => {
   try {
     const mod = await Mod.findOne({ shortId: req.params.shortId });
-    const settings = await WebsiteSettings.findOne();
+    const settings = await AdvancedWebsiteSettings.findOne();
     
     if (!mod) {
       return res.status(404).render('404', { title: 'Mod Not Found' });
@@ -73,8 +73,8 @@ router.get('/:shortId/checkpoint/3', async (req, res) => {
       checkpoint: 3,
       nextUrl: `/mod/${mod.shortId}/download`,
       apiType: settings ? settings.checkpoint3Api : 'none',
-      linkvertiseId: settings ? settings.linkvertiseId : '572754',
-      workinkId: settings ? settings.workinkId : '1Zga/m9rbrvua'
+      linkvertiseId: settings ? settings.linkvertiseId3 : '572754',
+      workinkId: settings ? settings.workinkId3 : '1Zh1/m9skr9gt'
     });
   } catch (err) {
     console.error(err);

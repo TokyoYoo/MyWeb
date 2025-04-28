@@ -459,43 +459,85 @@
             <% } %>
             
             <form id="websiteSettingsForm" action="/admin/settings/update-website" method="POST">
-              <div class="form-group">
-                <label for="linkvertiseId">Linkvertise ID</label>
-                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" value="<%= settings && settings.linkvertiseId ? settings.linkvertiseId : '572754' %>">
-                <small class="text-muted">The ID for your Linkvertise account</small>
+              <!-- Checkpoint 1 Settings -->
+              <div class="settings-group">
+                <h4 class="text-lg font-semibold mb-3 text-indigo-600">Checkpoint 1 Settings</h4>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
+                  <div class="form-group">
+                    <label for="checkpoint1Api">API Type</label>
+                    <select id="checkpoint1Api" name="checkpoint1Api" class="form-control">
+                      <option value="linkvertise" <%= (settings && settings.checkpoint1Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= (settings && settings.checkpoint1Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                      <option value="none" <%= (settings && settings.checkpoint1Api === 'none') ? 'selected' : '' %>>None</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="linkvertiseId1">Linkvertise ID</label>
+                    <input type="text" id="linkvertiseId1" name="linkvertiseId1" class="form-control" value="<%= settings && settings.linkvertiseId1 ? settings.linkvertiseId1 : '572754' %>">
+                    <small class="text-muted">The ID for your Linkvertise account for checkpoint 1</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="workinkId1">Work.ink ID</label>
+                    <input type="text" id="workinkId1" name="workinkId1" class="form-control" value="<%= settings && settings.workinkId1 ? settings.workinkId1 : '1Zh1/m9skr9gt' %>">
+                    <small class="text-muted">The ID for your Work.ink account for checkpoint 1</small>
+                  </div>
+                </div>
               </div>
               
-              <div class="form-group">
-                <label for="workinkId">Work.ink ID</label>
-                <input type="text" id="workinkId" name="workinkId" class="form-control" value="<%= settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua' %>">
-                <small class="text-muted">The ID for your Work.ink account (e.g., 1Zga/m9rbrvua)</small>
+              <!-- Checkpoint 2 Settings -->
+              <div class="settings-group">
+                <h4 class="text-lg font-semibold mb-3 text-indigo-600">Checkpoint 2 Settings</h4>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
+                  <div class="form-group">
+                    <label for="checkpoint2Api">API Type</label>
+                    <select id="checkpoint2Api" name="checkpoint2Api" class="form-control">
+                      <option value="linkvertise" <%= (settings && settings.checkpoint2Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= (settings && settings.checkpoint2Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                      <option value="none" <%= (settings && settings.checkpoint2Api === 'none') ? 'selected' : '' %>>None</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="linkvertiseId2">Linkvertise ID</label>
+                    <input type="text" id="linkvertiseId2" name="linkvertiseId2" class="form-control" value="<%= settings && settings.linkvertiseId2 ? settings.linkvertiseId2 : '572754' %>">
+                    <small class="text-muted">The ID for your Linkvertise account for checkpoint 2</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="workinkId2">Work.ink ID</label>
+                    <input type="text" id="workinkId2" name="workinkId2" class="form-control" value="<%= settings && settings.workinkId2 ? settings.workinkId2 : '1Zh1/m9skr9gt' %>">
+                    <small class="text-muted">The ID for your Work.ink account for checkpoint 2</small>
+                  </div>
+                </div>
               </div>
               
-              <div class="form-group">
-                <label for="checkpoint1Api">Checkpoint 1</label>
-                <select id="checkpoint1Api" name="checkpoint1Api" class="form-control">
-                  <option value="linkvertise" <%= (settings && settings.checkpoint1Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
-                  <option value="workink" <%= (settings && settings.checkpoint1Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
-                  <option value="none" <%= (settings && settings.checkpoint1Api === 'none') ? 'selected' : '' %>>None</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label for="checkpoint2Api">Checkpoint 2</label>
-                <select id="checkpoint2Api" name="checkpoint2Api" class="form-control">
-                  <option value="linkvertise" <%= (settings && settings.checkpoint2Api === 'linkvertise') || (!settings) ? 'selected' : '' %>>Linkvertise</option>
-                  <option value="workink" <%= (settings && settings.checkpoint2Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
-                  <option value="none" <%= (settings && settings.checkpoint2Api === 'none') ? 'selected' : '' %>>None</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label for="checkpoint3Api">Checkpoint 3</label>
-                <select id="checkpoint3Api" name="checkpoint3Api" class="form-control">
-                  <option value="linkvertise" <%= (settings && settings.checkpoint3Api === 'linkvertise') ? 'selected' : '' %>>Linkvertise</option>
-                  <option value="workink" <%= (settings && settings.checkpoint3Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
-                  <option value="none" <%= (settings && settings.checkpoint3Api === 'none') || (!settings) ? 'selected' : '' %>>None</option>
-                </select>
+              <!-- Checkpoint 3 Settings -->
+              <div class="settings-group">
+                <h4 class="text-lg font-semibold mb-3 text-indigo-600">Checkpoint 3 Settings</h4>
+                <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
+                  <div class="form-group">
+                    <label for="checkpoint3Api">API Type</label>
+                    <select id="checkpoint3Api" name="checkpoint3Api" class="form-control">
+                      <option value="linkvertise" <%= (settings && settings.checkpoint3Api === 'linkvertise') ? 'selected' : '' %>>Linkvertise</option>
+                      <option value="workink" <%= (settings && settings.checkpoint3Api === 'workink') ? 'selected' : '' %>>Work.ink</option>
+                      <option value="none" <%= (settings && settings.checkpoint3Api === 'none') || (!settings) ? 'selected' : '' %>>None</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="linkvertiseId3">Linkvertise ID</label>
+                    <input type="text" id="linkvertiseId3" name="linkvertiseId3" class="form-control" value="<%= settings && settings.linkvertiseId3 ? settings.linkvertiseId3 : '572754' %>">
+                    <small class="text-muted">The ID for your Linkvertise account for checkpoint 3</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="workinkId3">Work.ink ID</label>
+                    <input type="text" id="workinkId3" name="workinkId3" class="form-control" value="<%= settings && settings.workinkId3 ? settings.workinkId3 : '1Zh1/m9skr9gt' %>">
+                    <small class="text-muted">The ID for your Work.ink account for checkpoint 3</small>
+                  </div>
+                </div>
               </div>
               
               <div class="form-actions">
@@ -504,7 +546,6 @@
             </form>
           </div>
         </div>
-
   <!-- JavaScript for tabs -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
