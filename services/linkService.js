@@ -47,24 +47,24 @@ exports.getRedirectLink = async (checkpoint, destinationUrl) => {
 
     switch (providerType) {
       case 'linkvertise':
-        // Get Linkvertise ID for this checkpoint
-        providerId = checkpointConfig.linkvertiseId || settings.linkvertiseId;
+        // ใช้ค่า default แทนการอ้างอิง settings.linkvertiseId
+        providerId = checkpointConfig.linkvertiseId || '572754';
           
         // Build Linkvertise URL
         redirectUrl = `https://linkvertise.com/${providerId}/checkpoint-${checkpoint}?o=1&r=${encodeURIComponent(destinationUrl)}`;
         break;
         
       case 'workink':
-        // Get Work.ink ID for this checkpoint
-        providerId = checkpointConfig.workinkId || settings.workinkId;
+        // ใช้ค่า default แทนการอ้างอิง settings.workinkId
+        providerId = checkpointConfig.workinkId || '1Zh1/m9skr9gt';
           
         // Build Work.ink URL
         redirectUrl = `https://work.ink/${providerId}/checkpoint-${checkpoint}?url=${encodeURIComponent(destinationUrl)}`;
         break;
         
       case 'lootlab':
-        // Get Lootlab ID for this checkpoint
-        providerId = checkpointConfig.lootlabId || settings.lootlabId;
+        // ใช้ค่า default แทนการอ้างอิง settings.lootlabId
+        providerId = checkpointConfig.lootlabId || '1174439';
           
         // Build Lootlab URL
         redirectUrl = `https://lootlab.io/redirect/${providerId}/checkpoint-${checkpoint}?url=${encodeURIComponent(destinationUrl)}`;

@@ -40,9 +40,9 @@ exports.updateWebsite = async (req, res) => {
     if (checkpoint1) {
       settings.checkpoint1 = {
         provider: checkpoint1.provider || 'linkvertise',
-        linkvertiseId: checkpoint1.linkvertiseId || '',
-        workinkId: checkpoint1.workinkId || '',
-        lootlabId: checkpoint1.lootlabId || ''
+        linkvertiseId: checkpoint1.linkvertiseId || '572754',
+        workinkId: checkpoint1.workinkId || '1Zh1/m9skr9gt',
+        lootlabId: checkpoint1.lootlabId || '1174439'
       };
       // Update for backward compatibility
       settings.checkpoint1Api = checkpoint1.provider || 'linkvertise';
@@ -52,9 +52,9 @@ exports.updateWebsite = async (req, res) => {
     if (checkpoint2) {
       settings.checkpoint2 = {
         provider: checkpoint2.provider || 'linkvertise',
-        linkvertiseId: checkpoint2.linkvertiseId || '',
-        workinkId: checkpoint2.workinkId || '',
-        lootlabId: checkpoint2.lootlabId || ''
+        linkvertiseId: checkpoint2.linkvertiseId || '572754',
+        workinkId: checkpoint2.workinkId || '1Zh1/m9skr9gt',
+        lootlabId: checkpoint2.lootlabId || '1174439'
       };
       // Update for backward compatibility
       settings.checkpoint2Api = checkpoint2.provider || 'linkvertise';
@@ -64,13 +64,18 @@ exports.updateWebsite = async (req, res) => {
     if (checkpoint3) {
       settings.checkpoint3 = {
         provider: checkpoint3.provider || 'none',
-        linkvertiseId: checkpoint3.linkvertiseId || '',
-        workinkId: checkpoint3.workinkId || '',
-        lootlabId: checkpoint3.lootlabId || ''
+        linkvertiseId: checkpoint3.linkvertiseId || '572754',
+        workinkId: checkpoint3.workinkId || '1Zh1/m9skr9gt',
+        lootlabId: checkpoint3.lootlabId || '1174439'
       };
       // Update for backward compatibility
       settings.checkpoint3Api = checkpoint3.provider || 'none';
     }
+
+    // เก็บค่า default IDs ไว้เพื่อความเข้ากันได้กับโค้ดเก่า (ถึงแม้ว่าจะไม่แสดงใน UI แล้ว)
+    settings.linkvertiseId = '572754';
+    settings.workinkId = '1Zh1/m9skr9gt';
+    settings.lootlabId = '1174439';
 
     // Save updated settings
     await settings.save();

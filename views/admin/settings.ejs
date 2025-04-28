@@ -477,36 +477,11 @@
         <!-- Website Settings -->
         <div id="website" class="tab-content <%= locals.activeTab === 'website' ? 'active' : '' %>">
           <div class="settings-card">
-            <h3>Global Provider IDs</h3>
-            
-            <% if(locals.error && locals.activeTab === 'website'){ %>
-              <div class="alert alert-danger"><%= error %></div>
-            <% } %>
-            <% if(locals.success && locals.activeTab === 'website'){ %>
-              <div class="alert alert-success"><%= success %></div>
-            <% } %>
-            
-            <form id="websiteSettingsForm" action="/admin/settings/update-website" method="POST">
-              <div class="form-group">
-                <label for="linkvertiseId">Default Linkvertise ID</label>
-                <input type="text" id="linkvertiseId" name="linkvertiseId" class="form-control" 
-                       value="<%= settings && settings.linkvertiseId ? settings.linkvertiseId : '572754' %>">
-                <small class="text-muted">The default ID for your Linkvertise account</small>
-              </div>
-              
-              <div class="form-group">
-                <label for="workinkId">Default Work.ink ID</label>
-                <input type="text" id="workinkId" name="workinkId" class="form-control" 
-                       value="<%= settings && settings.workinkId ? settings.workinkId : '1Zga/m9rbrvua' %>">
-                <small class="text-muted">The default ID for your Work.ink account (e.g., 1Zga/m9rbrvua)</small>
-              </div>
-              
-              <div class="form-group">
-                <label for="lootlabId">Default Lootlab ID</label>
-                <input type="text" id="lootlabId" name="lootlabId" class="form-control" 
-                       value="<%= settings && settings.lootlabId ? settings.lootlabId : '1174439' %>">
-                <small class="text-muted">The default ID for your Lootlab account</small>
-              </div>
+            <small class="text-muted">Leave empty to use default ID</small>
+            */
+            // to:
+            /*
+              <small class="text-muted">Your Linkvertise account ID</small>
               
               <h3>Checkpoint Configurations</h3>
               
