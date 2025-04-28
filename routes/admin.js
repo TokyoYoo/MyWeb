@@ -6,6 +6,7 @@ const shortid = require('shortid');
 const Mod = require('../models/Mod');
 const User = require('../models/User');
 const auth = require('../middlewares/auth');
+const AdvancedWebsiteSettings = require('../models/AdvancedWebsiteSettings');
 const WebsiteSettings = require('../models/AdvancedWebsiteSettings');
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
@@ -223,22 +224,28 @@ router.post('/settings/change-password', isAdmin, async (req, res) => {
 });
 router.post('/settings/update-website', isAdmin, async (req, res) => {
   try {
-    const { linkvertiseId, workinkId, checkpoint1Api, checkpoint2Api, checkpoint3Api } = req.body;
+    const { 
+      linkvertiseId1, linkvertiseId2, linkvertiseId3,
+      workinkId1, workinkId2, workinkId3,
+      checkpoint1Api, checkpoint2Api, checkpoint3Api 
+    } = req.body;
     
     // หาหรือสร้างการตั้งค่า
     let settings = await WebsiteSettings.findOne();
     
     if (!settings) {
-      settings = new WebsiteSettings({
-        linkvertiseId,
-        workinkId,
-        checkpoint1Api,
-        checkpoint2Api,
-        checkpoint3Api
+      settings = new AdvancedWebsiteSettings({
+        linkvertiseId1, linkvertiseId2, linkvertiseId3,
+        workinkId1, workinkId2, workinkId3,
+        checkpoint1Api, checkpoint2Api, checkpoint3Api
       });
     } else {
-      settings.linkvertiseId = linkvertiseId;
-      settings.workinkId = workinkId;
+      settings.linkvertiseId1 = linkvertiseId1;
+      settings.linkvertiseId2 = linkvertiseId2;
+      settings.linkvertiseId3 = linkvertiseId3;
+      settings.workinkId1 = workinkId1;
+      settings.workinkId2 = workinkId2;
+      settings.workinkId3 = workinkId3;
       settings.checkpoint1Api = checkpoint1Api;
       settings.checkpoint2Api = checkpoint2Api;
       settings.checkpoint3Api = checkpoint3Api;
