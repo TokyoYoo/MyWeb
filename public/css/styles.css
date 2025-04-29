@@ -1323,10 +1323,6 @@ select.form-control:focus {
   box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.15);
   outline: none;
 }
-```css
-/* public/css/styles.css */
-
-/* ----------- Base Styles ----------- */
 
 :root {
   --primary: #4f46e5;
@@ -1888,4 +1884,3 @@ td {
     padding: 1rem;
   }
 }
-```
