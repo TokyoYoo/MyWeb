@@ -593,3 +593,360 @@ function getCountryName(code) {
   
   return countries[code] || code;
 }
+// public/js/dashboard.js
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up tab navigation
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons and contents
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked button and corresponding content
+      button.classList.add('active');
+      const targetId = button.dataset.target;
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+  
+  // Create charts from dashboard data
+  createUsageChart();
+  createTopModsChart();
+  createFunnelChart();
+  
+  // Initialize date filter functionality
+  initDateFilter();
+  
+  // Add animations and interactive elements
+  addInteractiveFeatures();
+});
+
+// Chart for usage statistics
+function createUsageChart() {
+  // Generate last 7 days for labels
+  const dates = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+  }
+  
+  // Generate random data for demonstration
+  const clickData = dates.map(() => Math.floor(Math.random() * 100) + 10);
+  const downloadData = clickData.map(value => Math.floor(value * (0.4 + Math.random() * 0.3)));
+  
+  const ctx = document.getElementById('usageChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          label: 'Clicks',
+          data: clickData,
+          fill: true,
+          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          borderColor: 'rgba(99, 102, 241, 1)',
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: 'rgba(99, 102, 241, 1)',
+          pointBorderWidth: 2
+        },
+        {
+          label: 'Downloads',
+          data: downloadData,
+          fill: true,
+          backgroundColor: 'rgba(14, 165, 233, 0.1)',
+          borderColor: 'rgba(14, 165, 233, 1)',
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: 'rgba(14, 165, 233, 1)',
+          pointBorderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,
+            padding: 15
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17, 24, 39, 0.8)',
+          padding: 12,
+          titleFont: {
+            size: 13
+          },
+          bodyFont: {
+            size: 12
+          },
+          displayColors: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false
+          },
+          ticks: {
+            font: {
+              size: 11
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            font: {
+              size: 11
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Chart for top scripts
+function createTopModsChart() {
+  const { mods } = window.dashboardData;
+  
+  // Sort mods by clicks and get top 5
+  const topMods = [...mods]
+    .sort((a, b) => b.clicks - a.clicks)
+    .slice(0, 5);
+  
+  const ctx = document.getElementById('topModsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: topMods.map(mod => mod.name),
+      datasets: [
+        {
+          label: 'Clicks',
+          data: topMods.map(mod => mod.clicks),
+          backgroundColor: 'rgba(99, 102, 241, 0.8)',
+          borderRadius: 4
+        },
+        {
+          label: 'Downloads',
+          data: topMods.map(mod => mod.completedClicks),
+          backgroundColor: 'rgba(14, 165, 233, 0.8)',
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,
+            padding: 15
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17, 24, 39, 0.8)',
+          padding: 12
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            font: {
+              size: 10
+            }
+          }
+        }
+      },
+      barPercentage: 0.6,
+      categoryPercentage: 0.7
+    }
+  });
+}
+
+// Chart for funnel analysis
+function createFunnelChart() {
+  const { mods } = window.dashboardData;
+  
+  // Calculate aggregate checkpoint data
+  const totalClicks = mods.reduce((sum, mod) => sum + mod.clicks, 0);
+  const totalCP1 = mods.reduce((sum, mod) => sum + (mod.checkpoint1Count || 0), 0);
+  const totalCP2 = mods.reduce((sum, mod) => sum + (mod.checkpoint2Count || 0), 0);
+  const totalCP3 = mods.reduce((sum, mod) => sum + (mod.checkpoint3Count || 0), 0);
+  const totalCompleted = mods.reduce((sum, mod) => sum + mod.completedClicks, 0);
+  
+  const ctx = document.getElementById('funnelChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Initial Clicks', 'Checkpoint 1', 'Checkpoint 2', 'Checkpoint 3', 'Downloads'],
+      datasets: [{
+        axis: 'y',
+        data: [totalClicks, totalCP1, totalCP2, totalCP3, totalCompleted],
+        fill: false,
+        backgroundColor: [
+          'rgba(99, 102, 241, 0.8)',  // Initial - Primary
+          'rgba(14, 165, 233, 0.8)',  // CP1 - Secondary
+          'rgba(16, 185, 129, 0.8)',  // CP2 - Success
+          'rgba(245, 158, 11, 0.8)',  // CP3 - Warning
+          'rgba(139, 92, 246, 0.8)'   // Downloads - Purple
+        ],
+        borderWidth: 0,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17, 24, 39, 0.8)',
+          callbacks: {
+            afterLabel: function(context) {
+              const index = context.dataIndex;
+              const value = context.raw;
+              const prevValue = index > 0 ? context.dataset.data[index - 1] : value;
+              const percentage = prevValue !== 0 ? Math.round((value / prevValue) * 100) : 0;
+              const dropoff = 100 - percentage;
+              
+              if (index === 0) return '';
+              return `Conversion: ${percentage}% | Drop-off: ${dropoff}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false
+          }
+        },
+        y: {
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+}
+
+// Initialize date filter functionality
+function initDateFilter() {
+  const dateFilter = document.getElementById('dateRange');
+  if (dateFilter) {
+    // Set default date to today
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    dateFilter.value = `${year}-${month}-${day}`;
+    
+    // Add event listener for date change
+    dateFilter.addEventListener('change', function() {
+      // In a real application, this would filter the data based on the selected date
+      // For now, we'll just show a notification
+      showNotification('Data filtered for ' + new Date(this.value).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }));
+    });
+  }
+}
+
+// Add animations and interactive features
+function addInteractiveFeatures() {
+  // Add hover effects to table rows
+  const tableRows = document.querySelectorAll('.mods-table tbody tr');
+  tableRows.forEach(row => {
+    row.addEventListener('mouseenter', () => {
+      row.style.transition = 'background-color 0.2s';
+    });
+  });
+  
+  // Add smooth scroll for navigation links
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // Prevent default only for in-page links
+      const href = this.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(href).scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+}
+
+// Show notification function
+function showNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  notification.style.position = 'fixed';
+  notification.style.bottom = '20px';
+  notification.style.right = '20px';
+  notification.style.backgroundColor = '#4f46e5';
+  notification.style.color = 'white';
+  notification.style.padding = '12px 20px';
+  notification.style.borderRadius = '8px';
+  notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+  notification.style.zIndex = '1000';
+  notification.style.opacity = '0';
+  notification.style.transform = 'translateY(20px)';
+  notification.style.transition = 'opacity 0.3s, transform 0.3s';
+  
+  document.body.appendChild(notification);
+  
+  // Show notification
+  setTimeout(() => {
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateY(0)';
+  }, 10);
+  
+  // Hide notification after 3 seconds
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateY(20px)';
+    
+    // Remove from DOM after animation
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
+}
