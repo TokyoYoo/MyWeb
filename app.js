@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const methodOverride = require('method-override');
 const connectDB = require('./config/db');
 const app = express();
-
+const fs = require('fs');
 
 // app 
 app.use(express.static('public'));
@@ -16,6 +16,18 @@ connectDB();
 
 // Load environment variables
 dotenv.config();
+
+// google adsense
+app.get('/ads.txt', (req, res) => {
+  const adsPath = path.join(__dirname, 'Ads.txt');
+  fs.readFile(adsPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(404).send('ads.txt not found');
+    }
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(data);
+  });
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://admin:eeUSxcB2qWiDKwVd@cluster0.1yxxo.mongodb.net/freemod', {
